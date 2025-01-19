@@ -1,6 +1,11 @@
+using Serilog;
+
 const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddCors(options =>
 {
@@ -38,6 +43,8 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
+    Log.Information("GetWeatherForecast endpoint called");
+
     var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
