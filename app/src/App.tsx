@@ -1,33 +1,11 @@
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function App() {
-  const [result, setResult] = useState<any[]>();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch("http://localhost:5047/weatherforecast");
-      const data = (await res.json()) as any[];
-      setResult(data);
-    };
-
-    fetchData();
-  }, []);
   return (
     <>
-      <h1>Resultats</h1>
+      <h1>Go to dashbord</h1>
 
-      {result?.map((el, index) =>
-        el ? (
-          <div key={index}>
-            <h2>{el.date}</h2>
-            <h3>{el.temperatureC}</h3>
-            <h3>{el.temperatureF}</h3>
-            <h3>{el.summary}</h3>
-          </div>
-        ) : (
-          <div>null</div>
-        )
-      )}
+      <Link to="/dashbord"> Click here </Link>
     </>
   );
 }
