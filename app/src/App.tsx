@@ -3,6 +3,7 @@ import { Box, Container, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "./components/auth/LoginButton";
+import logo from "./static/img/logo.png";
 
 function App() {
   const { isAuthenticated } = useAuth0();
@@ -20,7 +21,7 @@ function App() {
     <>
       <Box sx={{ marginBottom: 2, textAlign: "center" }}>
         <img
-          src="./src/static/img/logo.png"
+          src={logo}
           alt="logo"
           style={{ maxWidth: "600px", maxHeight: "600px" }}
         />
