@@ -1,7 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import { Container, Typography } from "@mui/material";
 import Header from "../components/Header";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
 import Profile from "../components/auth/Profile";
 
 function dashboard() {

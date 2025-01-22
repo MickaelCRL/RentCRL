@@ -1,7 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
+import { Box, Container, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "./components/auth/LoginButton";
