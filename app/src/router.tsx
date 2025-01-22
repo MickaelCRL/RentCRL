@@ -1,6 +1,6 @@
 import { createBrowserRouter, Outlet } from "react-router";
 import App from "./App";
-import Dashbord from "./pages/dashbord";
+import Dashboard from "./pages/dashboard";
 
 const Layout = () => {
   return (
@@ -20,8 +20,8 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path: "/dashbord",
-        element: <Dashbord />,
+        path: "/dashboard",
+        element: <Dashboard />,
       },
     ],
   },

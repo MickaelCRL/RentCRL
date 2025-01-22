@@ -1,11 +1,24 @@
-import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import LoginButton from "./components/auth/LoginButton";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function App() {
+  const { isAuthenticated } = useAuth0();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    } else {
+      console.log("Not authenticated");
+    }
+  }, [isAuthenticated, navigate]);
+
   return (
     <>
-      <h1>Go to dashbord</h1>
-
-      <Link to="/dashbord"> Click here </Link>
+      <h1>Bienvenue sur RentCRL</h1>
+      <LoginButton />
     </>
   );
 }
