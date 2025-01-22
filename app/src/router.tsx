@@ -1,14 +1,7 @@
-import { createBrowserRouter, Outlet } from "react-router";
+import { createBrowserRouter } from "react-router";
 import App from "./App";
+import Layout from "./components/Layout";
 import Dashboard from "./pages/dashboard";
-
-const Layout = () => {
-  return (
-    <>
-      <Outlet />
-    </>
-  );
-};
 
 const router = createBrowserRouter([
   {
