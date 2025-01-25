@@ -1,9 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Container, Typography } from "@mui/material";
 import Header from "../components/Header";
-import Profile from "../components/auth/Profile";
 
-function dashboard() {
+function Dashboard() {
   const { isAuthenticated, user } = useAuth0();
   console.log("isAuthenticated in dashboard", isAuthenticated);
   return (
@@ -11,9 +10,9 @@ function dashboard() {
       {isAuthenticated && user && (
         <>
           <Header />
-          <Profile />
           <Container
             sx={{
+              width: "100%",
               marginTop: 20,
               alignItems: "center",
               textAlign: "center",
@@ -22,10 +21,10 @@ function dashboard() {
               justifyContent: "center",
             }}
           >
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h4" gutterBottom sx={{ width: "100%" }}>
               Bonjour, {user.name}!
             </Typography>
-            <Typography variant="body1">
+            <Typography variant="body1" sx={{ width: "100%" }}>
               Bienvenue dans votre tableau de bord. Vous pouvez commencer à
               gérer vos quittances et vos données.
             </Typography>
@@ -36,4 +35,4 @@ function dashboard() {
   );
 }
 
-export default dashboard;
+export default Dashboard;

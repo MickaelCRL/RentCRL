@@ -3,7 +3,17 @@ import { Outlet } from "react-router-dom";
 const Layout = () => {
   return (
     <>
-      <Outlet />
+      <section
+        id="section"
+        style={{
+          width: "100%",
+          height: "auto",
+          alignItems: "center",
+          margin: "100px 0",
+        }}
+      >
+        <Outlet />
+      </section>
     </>
   );
 };
