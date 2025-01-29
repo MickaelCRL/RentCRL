@@ -7,7 +7,7 @@ const Layout = () => {
         id="section"
         style={{
           width: "100%",
-          height: "auto",
+          height: "70vh",
           alignItems: "center",
           margin: "100px 0",
         }}

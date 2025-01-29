@@ -29,14 +29,14 @@ function App() {
           justifyContent: "center",
         }}
       >
-        <Box sx={{ marginBottom: 2, textAlign: "center" }}>
+        <Box sx={{ textAlign: "center" }}>
           <img
             src={logo}
             alt="logo"
             style={{ width: "100%", maxWidth: "600px", maxHeight: "600px" }}
           />
         </Box>
-        <Typography variant="h4" sx={{ marginBottom: 2, width: "100%" }}>
+        <Typography variant="h4" sx={{ marginBottom: 1, width: "100%" }}>
           Bienvenue sur RentCRL
         </Typography>
         <Typography variant="body1" sx={{ marginBottom: 4, width: "100%" }}>

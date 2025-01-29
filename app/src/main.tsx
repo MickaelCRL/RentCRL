@@ -8,6 +8,8 @@ createRoot(document.getElementById("root")!).render(
     domain="dev-bko6t72qud7vo3ue.us.auth0.com"
     clientId="UGNkulDhA0DnTQWwQ0E42J5XMf1aDlAo"
     authorizationParams={{
+      audience: "https://api.rentcrl.com",
+      scope: "openid profile read:owners write:owners delete:owners",
       redirect_uri: window.location.origin,
     }}
     cacheLocation="localstorage"
