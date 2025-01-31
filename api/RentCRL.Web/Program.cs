@@ -44,7 +44,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(options =>
     {
         options.AddPolicy("read:messages", policy => policy.Requirements.Add(new
-        HasScopeRequirement("read:messages", "dev-bko6t72qud7vo3ue.us.auth0.com")));
+        HasScopeRequirement("read:messages", domain)));
     }
     );
 
