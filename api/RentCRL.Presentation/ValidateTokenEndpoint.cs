@@ -8,7 +8,7 @@ namespace RentCRL.Presentation
 {
     public static class ValidateTokenEndpoint
     {
-        public const string GetValidateTokenRoute = "/user/token";
+        public const string GetValidateTokenRoute = "/users";
 
         public static void MapValidateTokenEndpoint(this IEndpointRouteBuilder app)
         {
