@@ -4,7 +4,6 @@ import Header from "../components/Header";
 
 function Dashboard() {
   const { isAuthenticated, user } = useAuth0();
-  console.log("isAuthenticated in dashboard", isAuthenticated);
   return (
     <>
       {isAuthenticated && user && (
