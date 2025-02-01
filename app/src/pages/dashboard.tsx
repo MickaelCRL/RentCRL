@@ -9,7 +9,7 @@ function Dashboard() {
   const validateToken = async () => {
     const token = await getAccessTokenSilently();
     console.log("token", token);
-    const res = await fetch("http://localhost:5047/validate-token", {
+    const res = await fetch("http://localhost:5047/users", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

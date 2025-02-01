@@ -34,7 +34,7 @@ namespace RentCRL.Presentation
                 return context.Response.WriteAsJsonAsync(errorResponse);
             })
             .RequireAuthorization()
-            .WithName("ValidateToken");
+            .WithName("Users");
         }
 
 
