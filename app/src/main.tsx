@@ -5,9 +5,11 @@ import router from "./router";
 
 createRoot(document.getElementById("root")!).render(
   <Auth0Provider
-    domain="dev-bko6t72qud7vo3ue.us.auth0.com"
-    clientId="UGNkulDhA0DnTQWwQ0E42J5XMf1aDlAo"
+    domain={import.meta.env.VITE_AUTH0_DOMAIN}
+    clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
     authorizationParams={{
+      audience: {import.meta.env.VITE_AUTH0_AUDIENCE},
+      scope: "openid profile read:owners write:owners delete:owners",
       redirect_uri: window.location.origin,
     }}
     cacheLocation="localstorage"
