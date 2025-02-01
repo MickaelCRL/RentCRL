@@ -4,7 +4,6 @@ import Header from "../components/Header";
 
 function Dashboard() {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
-  console.log("isAuthenticated in dashboard", isAuthenticated);
 
   const validateToken = async () => {
     const token = await getAccessTokenSilently();
