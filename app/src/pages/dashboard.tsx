@@ -6,12 +6,6 @@ function Dashboard() {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   console.log("isAuthenticated in dashboard", isAuthenticated);
 
-  const showWeatherforecast = async () => {
-    const res = await fetch("http://localhost:5047/weatherforecast");
-    const data = await res.json();
-    console.log("data", data);
-  };
-
   const validateToken = async () => {
     const token = await getAccessTokenSilently();
     console.log("token", token);
@@ -49,14 +43,6 @@ function Dashboard() {
 
             <Button variant="contained" color="primary" onClick={validateToken}>
               Valider le token
-            </Button>
-
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={showWeatherforecast}
-            >
-              Voir la météo
             </Button>
           </Container>
         </>
