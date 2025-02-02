@@ -24,8 +24,6 @@ const Registration = () => {
   const [phoneError, setPhoneError] = useState("");
   const [owner, setOwner] = useState<Owner>();
 
-  const showIdToken = async () => {};
-
   useEffect(() => {
     if (user) {
       setOwner({
@@ -36,8 +34,6 @@ const Registration = () => {
         phoneNumber: "",
       });
     }
-    showIdToken();
-    console.log(user);
   }, [user]);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
