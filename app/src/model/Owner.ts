@@ -3,7 +3,7 @@ interface Owner {
   lastname?: string;
   firstname?: string;
   email?: string;
-  phone?: string;
+  phoneNumber?: string;
 }
 
 export default Owner;

@@ -16,12 +16,15 @@ import Owner from "../model/Owner";
 import Regexes from "../model/Regexes";
 
 const Registration = () => {
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
+  console.log("user", user);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [owner, setOwner] = useState<Owner>();
+
+  const showIdToken = async () => {};
 
   useEffect(() => {
     if (user) {
@@ -30,9 +33,11 @@ const Registration = () => {
         lastname: user.family_name,
         firstname: user.given_name,
         email: user.email,
-        phone: "",
+        phoneNumber: "",
       });
     }
+    showIdToken();
+    console.log(user);
   }, [user]);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,19 +47,26 @@ const Registration = () => {
       setPhoneError("Numéro de téléphone invalide");
     } else {
       setPhoneError("");
-      setOwner({ ...owner, [e.target.name]: e.target.value });
+      setOwner({ ...owner, phoneNumber: e.target.value });
     }
   };
 
   const handleSubmit = async () => {
     console.log("owner", owner);
+    const token = await getAccessTokenSilently();
 
     setLoading(true);
-    await fetch(`"http://localhost:5047/owners/${owner!.auth0Id}`, {
+    const res = await fetch(`http://localhost:5047/owners`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({ ...owner }),
     });
+
+    const data = await res.json();
+    console.log("data", data);
 
     setLoading(false);
     // navigate("/dashboard");
@@ -109,7 +121,7 @@ const Registration = () => {
                   variant="outlined"
                   label="Téléphone"
                   name="phone"
-                  defaultValue={owner?.phone}
+                  defaultValue={owner?.phoneNumber}
                   onChange={handlePhoneChange}
                   required
                   error={phoneError ? true : false}

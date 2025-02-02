@@ -17,6 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RentCRL.Application\RentCRL.Application.csproj" />
+    <ProjectReference Include="..\RentCRL.Infrastructure\RentCRL.Infrastructure.csproj" />
     <ProjectReference Include="..\RentCRL.Presentation\RentCRL.Presentation.csproj" />
   </ItemGroup>
 
