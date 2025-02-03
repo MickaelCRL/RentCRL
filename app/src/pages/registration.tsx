@@ -17,7 +17,6 @@ import Regexes from "../model/Regexes";
 
 const Registration = () => {
   const { user, getAccessTokenSilently } = useAuth0();
-  console.log("user", user);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState("");
@@ -65,7 +64,7 @@ const Registration = () => {
     console.log("data", data);
 
     setLoading(false);
-    // navigate("/dashboard");
+    navigate("/dashboard");
   };
 
   return (
@@ -130,7 +129,11 @@ const Registration = () => {
                   variant="contained"
                   color="primary"
                   onClick={handleSubmit}
-                  disabled={loading}
+                  disabled={
+                    loading ||
+                    owner?.phoneNumber === "" ||
+                    phoneError?.length > 0
+                  }
                 >
                   {loading ? (
                     <CircularProgress size={24} color="inherit" />
