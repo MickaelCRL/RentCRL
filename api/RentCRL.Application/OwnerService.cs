@@ -6,25 +6,17 @@ namespace RentCRL.Application
     {
         private IOwnerRepository _ownerRepository;
 
-
         public OwnerService(IOwnerRepository ownerRepository)
         {
             _ownerRepository = ownerRepository;
         }
 
-        public Owner CreateOwner(string auth0Id, string firstName, string lastName, string email, string phoneNumber)
+        public async Task<Owner> CreateOwnerAsync(string auth0Id, string firstName, string lastName, string email, string phoneNumber)
         {
             var newOwner = new Owner(auth0Id, firstName, lastName, email, phoneNumber);
 
-
-
-            _ownerRepository.RegisterOwner(newOwner);
-
-
-
-            return newOwner;
-
-        }
-       
+            return await _ownerRepository.AddAsync(newOwner);
+            
+        }       
     }
 }

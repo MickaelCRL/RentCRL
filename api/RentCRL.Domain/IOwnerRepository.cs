@@ -8,7 +8,7 @@ namespace RentCRL.Domain
 {
     public interface IOwnerRepository
     {
-        void RegisterOwner(Owner owner);
+        Task<Owner> AddAsync(Owner owner);
 
     }
 }

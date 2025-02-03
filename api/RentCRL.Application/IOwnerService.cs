@@ -9,6 +9,6 @@ namespace RentCRL.Application
 {
     public interface IOwnerService
     {
-        Owner CreateOwner(string auth0Id, string firstName, string lastName, string email, string phoneNumber);
+        Task<Owner> CreateOwnerAsync(string auth0Id, string firstName, string lastName, string email, string phoneNumber);
     }
 }

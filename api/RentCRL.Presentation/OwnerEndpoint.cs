@@ -15,13 +15,9 @@ namespace RentCRL.Presentation
         {
             app.MapPost(GetOwnerRoute, ([FromBody] OwnerModel ownerModel, IOwnerService ownerService) =>
             {                
-                Console.WriteLine("OwnerModel: " + ownerModel);
-
-                var newOwner = ownerService.CreateOwner(ownerModel.Auth0Id, ownerModel.FirstName, ownerModel.LastName, ownerModel.Email, ownerModel.PhoneNumber);
-
+                var newOwner = ownerService.CreateOwnerAsync(ownerModel.Auth0Id, ownerModel.FirstName, ownerModel.LastName, ownerModel.Email, ownerModel.PhoneNumber);
 
                 return newOwner;
-
             })
             .RequireAuthorization()
             .WithName("Owners");

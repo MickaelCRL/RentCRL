@@ -3,21 +3,8 @@ import { Button, Container, Typography } from "@mui/material";
 import Header from "../components/Header";
 
 function Dashboard() {
-  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
 
-  const validateToken = async () => {
-    const token = await getAccessTokenSilently();
-    console.log("token", token);
-    const res = await fetch("http://localhost:5047/users", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = await res.json();
-    console.log("data", data);
-  };
-
-  console.log("user", user);
   return (
     <>
       {isAuthenticated && user && (
@@ -41,10 +28,6 @@ function Dashboard() {
               Bienvenue dans votre tableau de bord. Vous pouvez commencer à
               gérer vos quittances et vos données.
             </Typography>
-
-            <Button variant="contained" color="primary" onClick={validateToken}>
-              Valider le token
-            </Button>
           </Container>
         </>
       )}

@@ -12,8 +12,6 @@ function App() {
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/registration");
-    } else {
-      console.log("Not authenticated");
     }
   }, [isAuthenticated, navigate]);
 

@@ -4,11 +4,10 @@ namespace RentCRL.Infrastructure
 {
     public class OwnerRepository : IOwnerRepository
     {
-        public void RegisterOwner(Owner owner)
+        public async Task<Owner> AddAsync(Owner owner)
         {
-
-            Console.WriteLine($"Owner {owner.FirstName} {owner.LastName} enregistré avec succès !");
+            return await Task.FromResult(owner);
+           
         }
-
     }
 }

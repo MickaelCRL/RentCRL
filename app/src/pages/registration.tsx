@@ -47,11 +47,10 @@ const Registration = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("owner", owner);
     const token = await getAccessTokenSilently();
 
     setLoading(true);
-    const res = await fetch(`http://localhost:5047/owners`, {
+    await fetch(`http://localhost:5047/owners`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,9 +58,6 @@ const Registration = () => {
       },
       body: JSON.stringify({ ...owner }),
     });
-
-    const data = await res.json();
-    console.log("data", data);
 
     setLoading(false);
     navigate("/dashboard");
