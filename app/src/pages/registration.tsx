@@ -50,7 +50,7 @@ const Registration = () => {
     const token = await getAccessTokenSilently();
 
     setLoading(true);
-    await fetch(`http://localhost:5047/owners`, {
+    await fetch(`${import.meta.env.VITE_API_BASE_URL}/owners`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

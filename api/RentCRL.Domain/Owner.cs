@@ -2,12 +2,12 @@
 {
     public class Owner
     {
-        Guid Id { get; set; }
-        string Auth0Id { get; set; }
-        string FirstName { get; set; }
-        string LastName { get; set; }
-        string Email { get; set; }
-        string PhoneNumber { get; set; }
+        public Guid Id { get; private set; }
+        public string Auth0Id { get; private set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public string Email { get; private set; }
+        public string PhoneNumber { get; private set; }
 
         public Owner(string auth0Id, string firstName, string lastName, string email, string phoneNumber)
         {
