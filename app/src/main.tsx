@@ -9,7 +9,7 @@ createRoot(document.getElementById("root")!).render(
     clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
     authorizationParams={{
       audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-      scope: "openid profile read:owners write:owners delete:owners",
+      scope: "openid profile email",
       redirect_uri: window.location.origin,
     }}
     cacheLocation="localstorage"
