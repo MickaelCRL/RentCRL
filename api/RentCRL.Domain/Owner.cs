@@ -1,4 +1,6 @@
-﻿namespace RentCRL.Domain
+﻿using System.Net.Mail;
+
+namespace RentCRL.Domain
 {
     public class Owner
     {
