@@ -1,4 +1,4 @@
-﻿namespace RentCRL.Presentation
+﻿namespace RentCRL.Presentation.Users
 {
     public record OwnerModel
     (
@@ -9,6 +9,5 @@
         string Email,
         string PhoneNumber
     )
-    {}  
-    
+    { }
 }

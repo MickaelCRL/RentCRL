@@ -1,13 +1,13 @@
 ﻿using AutoFixture;
 using AutoFixture.NUnit3;
+using RentCRL.Domain.Users;
 using RentCRL.Tests.Utils;
 using Shouldly;
-using System.Net.Mail;
 
-namespace RentCRL.Domain.Tests.Unit
+namespace RentCRL.Domain.Tests.Unit.Users
 {
     [TestFixture]
-    public class OwnerTest
+    public class OwnerTests
     {
         private Fixture _fixture;
 
@@ -16,6 +16,7 @@ namespace RentCRL.Domain.Tests.Unit
         {
             _fixture = new();
         }
+
         #region Constructor
         [Test, AutoData]
         public void Constructor_ValidArgument_CreateOwner(
@@ -46,7 +47,7 @@ namespace RentCRL.Domain.Tests.Unit
             // Act 
             var action = () =>
             {
-                Owner owner = OwnerBuilder.Build()
+                var owner = OwnerBuilder.Build()
                                           .WithAuth0Id(string.Empty)
                                           .Create();
             };
@@ -61,7 +62,7 @@ namespace RentCRL.Domain.Tests.Unit
             // Act
             var action = () =>
             {
-                Owner owner = OwnerBuilder.Build()
+                var owner = OwnerBuilder.Build()
                                           .WithFirstName(string.Empty)
                                           .Create();
             };
@@ -76,7 +77,7 @@ namespace RentCRL.Domain.Tests.Unit
             // Act
             var action = () =>
             {
-                Owner owner = OwnerBuilder.Build()
+                var owner = OwnerBuilder.Build()
                                           .WithLastName(string.Empty)
                                           .Create();
             };
@@ -95,7 +96,7 @@ namespace RentCRL.Domain.Tests.Unit
             // Act
             var action = () =>
             {
-                Owner owner = OwnerBuilder.Build()
+                var owner = OwnerBuilder.Build()
                                           .WithEmail(email)
                                           .Create();
             };
@@ -115,7 +116,7 @@ namespace RentCRL.Domain.Tests.Unit
             // Act
             var action = () =>
             {
-                Owner owner = OwnerBuilder.Build()
+                var owner = OwnerBuilder.Build()
                           .WithPhoneNumber(phoneNumber)
                           .Create();
             };
@@ -124,7 +125,5 @@ namespace RentCRL.Domain.Tests.Unit
             action.ShouldThrow<ArgumentException>();
         }
         #endregion
-
     }
-
 }

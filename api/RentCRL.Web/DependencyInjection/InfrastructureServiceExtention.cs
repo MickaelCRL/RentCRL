@@ -1,5 +1,5 @@
-﻿using RentCRL.Domain;
-using RentCRL.Infrastructure;
+﻿using RentCRL.Domain.Users;
+using RentCRL.Infrastructure.Users;
 
 namespace RentCRL.Web.DependencyInjection
 {

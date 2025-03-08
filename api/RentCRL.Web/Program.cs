@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using RentCRL.Application;
-using RentCRL.Domain;
-using RentCRL.Infrastructure;
-using RentCRL.Presentation;
+using RentCRL.Presentation.Users;
 using RentCRL.Web;
 using RentCRL.Web.DependencyInjection;
 using Serilog;

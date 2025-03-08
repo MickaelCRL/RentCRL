@@ -1,10 +1,10 @@
-﻿using RentCRL.Domain;
+﻿using RentCRL.Domain.Users;
 
-namespace RentCRL.Application
+namespace RentCRL.Application.Users
 {
     public class OwnerService : IOwnerService
     {
-        private IOwnerRepository _ownerRepository;
+        private readonly IOwnerRepository _ownerRepository;
 
         public OwnerService(IOwnerRepository ownerRepository)
         {
@@ -14,9 +14,7 @@ namespace RentCRL.Application
         public async Task<Owner> CreateOwnerAsync(string auth0Id, string firstName, string lastName, string email, string phoneNumber)
         {
             var newOwner = new Owner(auth0Id, firstName, lastName, email, phoneNumber);
-
             return await _ownerRepository.AddAsync(newOwner);
-            
         }       
     }
 }

@@ -1,11 +1,6 @@
-﻿using RentCRL.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RentCRL.Domain.Users;
 
-namespace RentCRL.Application
+namespace RentCRL.Application.Users
 {
     public interface IOwnerService
     {

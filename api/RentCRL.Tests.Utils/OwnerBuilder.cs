@@ -1,10 +1,5 @@
 ﻿using AutoFixture;
-using RentCRL.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RentCRL.Domain.Users;
 
 namespace RentCRL.Tests.Utils
 {
@@ -28,14 +23,11 @@ namespace RentCRL.Tests.Utils
         public static OwnerBuilder Build()
         {
             return new OwnerBuilder();
-
         }
 
         public Owner Create()
         {
             return new Owner(_auth0Id, _firstName, _lastName, _email, _phoneNumber);
-
-
         }
 
         public OwnerBuilder WithAuth0Id(string auth0Id)
@@ -67,6 +59,5 @@ namespace RentCRL.Tests.Utils
             _phoneNumber = phoneNumber;
             return this;
         }
-
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Net.Mail;
 
-namespace RentCRL.Domain
+namespace RentCRL.Domain.Users
 {
     public class Owner
     {

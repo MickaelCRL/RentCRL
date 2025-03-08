@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using RentCRL.Application;
-using RentCRL.Domain;
-using System.Runtime.InteropServices;
+using RentCRL.Application.Users;
+using RentCRL.Domain.Users;
+using RentCRL.Presentation.Users;
 
-namespace RentCRL.Presentation
+namespace RentCRL.Presentation.Users
 {
     public static class OwnerEndpoint
     {
