@@ -30,7 +30,7 @@ namespace RentCRL.Domain.Tests.Unit.Users
             var phoneNumber = _fixture.CreatePhoneNumber();
 
             // Act
-            Owner owner = new(auth0Id, firstName, lastName, email, phoneNumber);
+            var owner = new Owner (auth0Id, firstName, lastName, email, phoneNumber);
 
             // Assert
             owner.ShouldNotBeNull();
