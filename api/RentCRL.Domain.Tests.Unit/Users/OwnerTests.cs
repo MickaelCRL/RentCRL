@@ -90,9 +90,10 @@ namespace RentCRL.Domain.Tests.Unit.Users
         [TestCase("")]
         [TestCase("invalidEmail")]
         [TestCase("@invaildEmail.com")]
-        public void Constructor_InvalidEmail_ThrowArgumentException(
+        public void Constructor_InvalidEmail_ThrowArgumentException
+        (
             string email
-            )
+        )
         {
             // Act
             var action = () =>
@@ -110,9 +111,10 @@ namespace RentCRL.Domain.Tests.Unit.Users
         [TestCase("33600000000")]
         [TestCase("+toto")]
         [TestCase("skululu")]
-        public void Constructor_InvalidPhoneNumber_ThrowArgumentException(
+        public void Constructor_InvalidPhoneNumber_ThrowArgumentException
+        (
             string phoneNumber
-            )
+        )
         {
             // Act
             var action = () =>
