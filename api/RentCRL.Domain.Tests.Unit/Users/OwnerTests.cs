@@ -19,11 +19,12 @@ namespace RentCRL.Domain.Tests.Unit.Users
 
         #region Constructor
         [Test, AutoData]
-        public void Constructor_ValidArgument_CreateOwner(
+        public void Constructor_ValidArgument_CreateOwner
+        (
             string auth0Id,
             string firstName,
             string lastName
-            )
+        )
         {
             // Arrange
             var email = _fixture.CreateEmail();
