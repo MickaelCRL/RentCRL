@@ -13,9 +13,8 @@ namespace RentCRL.Presentation.Users
         public static void MapOwnerEndpoint(this IEndpointRouteBuilder app)
         {
             app.MapPost(GetOwnerRoute, ([FromBody] OwnerModel ownerModel, IOwnerService ownerService) =>
-            {                
+            {
                 var newOwner = ownerService.CreateOwnerAsync(ownerModel.Auth0Id, ownerModel.FirstName, ownerModel.LastName, ownerModel.Email, ownerModel.PhoneNumber);
-
                 return newOwner;
             })
             .RequireAuthorization()

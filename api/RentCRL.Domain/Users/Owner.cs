@@ -1,9 +1,11 @@
-﻿using System.Net.Mail;
+﻿using Newtonsoft.Json;
+using System.Net.Mail;
 
 namespace RentCRL.Domain.Users
 {
     public class Owner
     {
+        [JsonProperty("id")]
         public Guid Id { get; private set; }
         public string Auth0Id { get; private set; }
         public string FirstName { get; private set; }
