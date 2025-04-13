@@ -9,9 +9,17 @@ namespace RentCRL.Web.DependencyInjection
         {
             var services = builder.Services;
 
-            services.AddTransient<IOwnerRepository, OwnerRepository>();
+            AddDatabaseConnection(builder, services);
 
+            services.AddScoped<IOwnerRepository, OwnerRepository>();
         }
 
+        public static void AddDatabaseConnection(WebApplicationBuilder builder, IServiceCollection services)
+        {
+            var endpoint = builder.Configuration["CosmosDB:EndpointUri"];
+            var primaryKey = builder.Configuration["CosmosDB:PrimaryKey"];
+            var database = builder.Configuration["CosmosDB:DatabaseName"];
+            services.AddSingleton(new CosmosDbService(endpoint!, primaryKey!, database!));
+        }
     }
 }

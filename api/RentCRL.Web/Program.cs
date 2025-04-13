@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using RentCRL.Domain.Users;
-using RentCRL.Infrastructure.Users;
 using RentCRL.Presentation.Users;
 using RentCRL.Web;
 using RentCRL.Web.DependencyInjection;
@@ -53,19 +51,13 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
-// database connection
-var endpoint = builder.Configuration["CosmosDB:EndpointUri"];
-var primaryKey = builder.Configuration["CosmosDB:PrimaryKey"];
-var database = builder.Configuration["CosmosDB:DatabaseName"];
-builder.Services.AddSingleton(new CosmosDbService(endpoint!, primaryKey!, database!));
-builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
-
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 builder.RegisterInfrastructureServices();
 builder.RegisterApplicationServices();
+builder.RegisterPresentationServices();
 
 var app = builder.Build();
 
