@@ -37,7 +37,6 @@ const Registration = () => {
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPhone(e.target.value);
-
     if (!phone.match(Regexes.phoneNumber)) {
       setPhoneError("Numéro de téléphone invalide");
     } else {
@@ -48,7 +47,6 @@ const Registration = () => {
 
   const handleSubmit = async () => {
     const token = await getAccessTokenSilently();
-
     setLoading(true);
     await fetch(`${import.meta.env.VITE_API_BASE_URL}/owners`, {
       method: "POST",

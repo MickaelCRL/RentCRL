@@ -42,7 +42,7 @@ function Profile() {
             }}
             sx={{ mt: 1 }}
           >
-            <Typography sx={{ p: 2, textAlign: "center" }}>
+            <Typography component="div" sx={{ p: 2, textAlign: "center" }}>
               <Avatar
                 src={user.picture}
                 alt="user picture"
