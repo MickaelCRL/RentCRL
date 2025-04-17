@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using RentCRL.Application.Users;
+using RentCRL.Domain.Users;
 
 namespace RentCRL.Presentation.Users
 {
     public static class OwnerEndpoint
     {
         public const string PostOwnerRoute = "/owners";
+
         public static void MapOwnerEndpoint(this IEndpointRouteBuilder app)
         {
             app.MapPost(PostOwnerRoute, CreateOwner)
@@ -17,7 +19,7 @@ namespace RentCRL.Presentation.Users
             .WithName("Owners");
         }
 
-        internal static async Task<IResult> CreateOwner( [FromBody] OwnerModel ownerModel, IOwnerService ownerService, IValidator<OwnerModel> validator)
+        internal static async Task<IResult> CreateOwner([FromBody] OwnerModel ownerModel, IOwnerService ownerService, IValidator<OwnerModel> validator)
         {
             var validationResult = validator.Validate(ownerModel);
             if (!validationResult.IsValid)
@@ -37,7 +39,7 @@ namespace RentCRL.Presentation.Users
                 return Results.Ok(newOwner);
             }
 
-            if (result.Error.Code == "OwnerWithEmailAlreadyExists")
+            if (result.Error == UserErrors.EmailAlreadyExists)
                 return Results.Conflict();
 
             return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);

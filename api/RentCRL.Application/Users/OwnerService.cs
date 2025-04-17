@@ -16,7 +16,7 @@ namespace RentCRL.Application.Users
         {
             var response = _ownerRepository.GetByEmailAsync(email);
             if (response.Result != null)
-                return Result.Failure<Owner>(new Error ("OwnerWithEmailAlreadyExists", "Owner with email already exists."));
+                return Result.Failure<Owner>(UserErrors.EmailAlreadyExists);
 
             var newOwner = new Owner(auth0Id, firstName, lastName, email, phoneNumber);
             return await _ownerRepository.AddAsync(newOwner);
