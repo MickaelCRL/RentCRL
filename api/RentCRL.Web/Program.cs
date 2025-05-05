@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using RentCRL.Presentation.Users;
 using RentCRL.Web;
 using RentCRL.Web.DependencyInjection;
+using Scalar.AspNetCore;
 using Serilog;
 using System.Security.Claims;
 
@@ -59,12 +60,27 @@ builder.RegisterInfrastructureServices();
 builder.RegisterApplicationServices();
 builder.RegisterPresentationServices();
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080);
+});
+
 var app = builder.Build();
+
+app.MapGet("/", () => Results.Ok("OK"));
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
+if (app.Environment.IsStaging())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 //app.UseHttpsRedirection();
