@@ -24,6 +24,8 @@ const Registration = () => {
   const [owner, setOwner] = useState<Owner>();
 
   useEffect(() => {
+    console.log(`${globalConfig.apiBaseUrl}/owners`);
+    console.log("toto");
     if (user) {
       setOwner({
         auth0Id: user.sub,
@@ -46,9 +48,15 @@ const Registration = () => {
   };
 
   const handleSubmit = async () => {
+    const ownerUrl = `${globalConfig.apiBaseUrl}/owners`;
+    console.log(`Owner URL: ${ownerUrl}`);
+
+    const url = new URL("/owners", globalConfig.apiBaseUrl);
+    await fetch(url.toString());
+
     const token = await getAccessTokenSilently();
     setLoading(true);
-    await fetch(`${import.meta.env.VITE_API_BASE_URL}/owners`, {
+    await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

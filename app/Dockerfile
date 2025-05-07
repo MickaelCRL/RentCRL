@@ -1,14 +1,5 @@
-# Étape 1 : Construire l'application React
-FROM node:18 AS build
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-
-# Étape 2 : Servir avec Nginx
-FROM nginx:1.27.3-alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+FROM nginx:1.27.5-alpine
+COPY dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/bin/sh", "-c", "envsubst < /usr/share/nginx/html/config/env.template.js > /usr/share/nginx/html/config/env.js && nginx -g 'daemon off;'"]

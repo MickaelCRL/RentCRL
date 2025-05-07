@@ -10,6 +10,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(`${globalConfig.apiBaseUrl}/owners`);
     if (isAuthenticated) {
       navigate("/registration");
     }
