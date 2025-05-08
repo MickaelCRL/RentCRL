@@ -13,8 +13,9 @@ $registryName = "crrentcrlfc"
 $registryServerName = "$registryName.azurecr.io"
 $imageName = "$registryServerName/app:$version"
 
-## build react solution
+## build solution
 npm run build
+Write-Host "Build solution completed."
 
 ## build the image
 docker build . -t $imageName
