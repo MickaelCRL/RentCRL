@@ -1,8 +1,7 @@
 # Base image for running the application
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 80
 
 # Build stage
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
@@ -19,6 +18,7 @@ RUN dotnet publish "RentCRL.Web.csproj" -c Release -o /app/publish /p:UseAppHost
 
 # Final stage for running the application
 FROM base AS final
+ENV ASPNETCORE_HTTP_PORTS=80
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "RentCRL.Web.dll"]

@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Box, Container, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import LogoutButton from "./components/auth/LoginButton";
+import LoginButton from "./components/auth/LoginButton";
 import logo from "./static/img/logo.svg";
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
           Connectez-vous pour accéder à votre tableau de bord et gérer vos
           quittances.
         </Typography>
-        <LogoutButton />
+        <LoginButton />
       </Container>
     </>
   );

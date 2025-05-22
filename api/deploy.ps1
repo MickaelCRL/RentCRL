@@ -10,10 +10,6 @@ if (-not $version) {
 $registryName = "crrentcrlfc"
 $imageName = "$registryName.azurecr.io/api:$version"
 
-## build the solution
-# dotnet restore RentCRL.Web/RentCRL.Web.csproj
-# dotnet publish RentCRL.Web/RentCRL.Web.csproj -c Release -o ./publish
-
 ## build the image
 docker build -t $imageName -f RentCRL.Web/Dockerfile .
 

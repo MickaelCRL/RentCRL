@@ -19,7 +19,7 @@ namespace RentCRL.Web.DependencyInjection
             var endpoint = builder.Configuration["CosmosDB:EndpointUri"];
             var primaryKey = builder.Configuration["CosmosDB:PrimaryKey"];
             var database = builder.Configuration["CosmosDB:DatabaseName"];
-            services.AddSingleton(new CosmosDbService(endpoint!, primaryKey!, database!));
+            services.AddSingleton(new CosmosDbService(endpoint, primaryKey, database));
         }
     }
 }

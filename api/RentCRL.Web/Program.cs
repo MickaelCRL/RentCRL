@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:5173")
+                          policy.WithOrigins(builder.Configuration["AppBaseUrl"])
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials();
@@ -46,7 +46,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(options =>
     {
         options.AddPolicy("read:messages", policy => policy.Requirements.Add(new
-        HasScopeRequirement("read:messages", domain!)));
+        HasScopeRequirement("read:messages", domain)));
     }
     );
 
@@ -59,11 +59,6 @@ builder.Services.AddOpenApi();
 builder.RegisterInfrastructureServices();
 builder.RegisterApplicationServices();
 builder.RegisterPresentationServices();
-
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(8080);
-});
 
 var app = builder.Build();
 
