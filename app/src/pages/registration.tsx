@@ -25,7 +25,6 @@ const Registration = () => {
 
   useEffect(() => {
     console.log(`${globalConfig.apiBaseUrl}/owners`);
-    console.log("toto");
     if (user) {
       setOwner({
         auth0Id: user.sub,
@@ -51,12 +50,9 @@ const Registration = () => {
     const ownerUrl = `${globalConfig.apiBaseUrl}/owners`;
     console.log(`Owner URL: ${ownerUrl}`);
 
-    const url = new URL("/owners", globalConfig.apiBaseUrl);
-    await fetch(url.toString());
-
     const token = await getAccessTokenSilently();
     setLoading(true);
-    await fetch(url, {
+    await fetch(ownerUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
