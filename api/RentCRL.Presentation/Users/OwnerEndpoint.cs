@@ -10,13 +10,17 @@ namespace RentCRL.Presentation.Users
 {
     public static class OwnerEndpoint
     {
-        public const string PostOwnerRoute = "/owners";
+        public const string OwnerRoute = "/owners";
 
         public static void MapOwnerEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapPost(PostOwnerRoute, CreateOwner)
+            app.MapPost(OwnerRoute, CreateOwner)
             .RequireAuthorization()
-            .WithName("Owners");
+            .WithName("CreateOwner");
+
+            app.MapGet(OwnerRoute, GetOwner)
+                .RequireAuthorization()
+                .WithName("GetOwner");
         }
 
         internal static async Task<IResult> CreateOwner([FromBody] OwnerModel ownerModel, IOwnerService ownerService, IValidator<OwnerModel> validator)
@@ -41,6 +45,23 @@ namespace RentCRL.Presentation.Users
 
             if (result.Error == UserErrors.EmailAlreadyExists)
                 return Results.Conflict();
+
+            return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);
+        }
+
+        internal static async Task<IResult> GetOwner([FromQuery] string email, IOwnerService ownerService)
+        {
+            var result = await ownerService.GetOwnerByEmailAsync(email);
+
+            if (result.IsSuccess)
+            {
+               Console.WriteLine(result.Value.ToString());
+                var newOwner = result.Value.ToModel();
+                return Results.Ok(newOwner);
+            }
+
+            if (result.Error == UserErrors.CouldNotFindUserWithEmail)
+                return Results.NotFound();
 
             return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);
         }

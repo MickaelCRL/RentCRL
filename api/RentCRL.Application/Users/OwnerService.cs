@@ -20,6 +20,15 @@ namespace RentCRL.Application.Users
 
             var newOwner = new Owner(auth0Id, firstName, lastName, email, phoneNumber);
             return await _ownerRepository.AddAsync(newOwner);
-        }       
+        }
+
+        public async Task<Result<Owner>> GetOwnerByEmailAsync(string email)
+        {
+            var response = _ownerRepository.GetByEmailAsync(email);
+            if (response.Result == null)
+                return Result.Failure<Owner>(UserErrors.CouldNotFindUserWithEmail);
+
+            return await response;
+        }
     }
 }

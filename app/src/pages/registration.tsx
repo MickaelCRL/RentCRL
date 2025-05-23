@@ -14,6 +14,7 @@ import {
 import Header from "../components/Header";
 import Owner from "../model/Owner";
 import Regexes from "../model/Regexes";
+import { fetcherWithToken } from "../utils/fetcher";
 
 const Registration = () => {
   const { user, getAccessTokenSilently } = useAuth0();
@@ -52,14 +53,8 @@ const Registration = () => {
 
     const token = await getAccessTokenSilently();
     setLoading(true);
-    await fetch(ownerUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ ...owner }),
-    });
+
+    await fetcherWithToken(ownerUrl, token, "POST", { ...owner });
 
     setLoading(false);
     navigate("/dashboard");

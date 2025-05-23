@@ -4,18 +4,38 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginButton from "./components/auth/LoginButton";
 import logo from "./static/img/logo.svg";
+import SpinnerLoading from "./components/ui/SpinnerLoading";
+import { fetcherWithToken } from "./utils/fetcher";
 
 function App() {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, isLoading, getAccessTokenSilently, user } =
+    useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(`${globalConfig.apiBaseUrl}/owners`);
-    if (isAuthenticated) {
-      navigate("/registration");
-    }
-  }, [isAuthenticated, navigate]);
+    const checkOwner = async () => {
+      if (!isLoading && isAuthenticated) {
+        const token = await getAccessTokenSilently();
+        const ownerUrl = `${globalConfig.apiBaseUrl}/owners`;
+        const email = encodeURIComponent(user?.email || "");
+        const owner = await fetcherWithToken(
+          `${ownerUrl}?email=${email}`,
+          token,
+          "GET"
+        );
+        if (owner) {
+          navigate("/dashboard");
+        } else {
+          navigate("/registration");
+        }
+      }
+    };
+    checkOwner();
+  }, [isAuthenticated, isLoading, getAccessTokenSilently, navigate]);
 
+  if (isLoading) {
+    return <SpinnerLoading />;
+  }
   return (
     <>
       <Container
