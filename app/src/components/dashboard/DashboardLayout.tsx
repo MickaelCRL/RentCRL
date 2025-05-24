@@ -12,11 +12,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { logout } = useAuth0();
   const navigate = useNavigate();
   const iconColor = "#1A237E";
@@ -88,3 +84,5 @@ export default function DashboardLayout({
     </Box>
   );
 }
+
+export default DashboardLayout;
