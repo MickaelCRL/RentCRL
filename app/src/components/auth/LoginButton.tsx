@@ -11,7 +11,7 @@ const LoginButton = () => {
       onClick={() => loginWithRedirect()}
       sx={{ padding: "12px 24px", fontSize: "18px", minWidth: "150px" }}
     >
-      Log In
+      Se connecter
     </Button>
   );
 };

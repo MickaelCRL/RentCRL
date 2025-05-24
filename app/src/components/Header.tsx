@@ -7,7 +7,12 @@ function Header() {
     <>
       <AppBar
         elevation={0}
-        sx={{ backgroundColor: "#ffffff", color: "#000000", width: "100%" }}
+        sx={{
+          backgroundColor: "#ffffff",
+          color: "#000000",
+          width: "100%",
+          borderBottom: "1px solid #E0E0E0",
+        }}
       >
         <Toolbar sx={{ justifyContent: "space-between", padding: "0 20px" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>

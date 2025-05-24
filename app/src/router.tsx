@@ -3,6 +3,7 @@ import App from "./App";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/dashboard";
 import Registration from "./pages/registration";
+import Properties from "./pages/properties";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "/registration",
         element: <Registration />,
+      },
+      {
+        path: "/properties",
+        element: <Properties />,
       },
     ],
   },

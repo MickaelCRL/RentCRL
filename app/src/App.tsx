@@ -33,7 +33,7 @@ function App() {
     checkOwner();
   }, [isAuthenticated, isLoading, getAccessTokenSilently, navigate]);
 
-  if (isLoading) {
+  if (isLoading || isAuthenticated) {
     return <SpinnerLoading />;
   }
   return (

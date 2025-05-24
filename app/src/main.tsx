@@ -2,6 +2,8 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
 import { Auth0Provider } from "@auth0/auth0-react";
 import router from "./router";
+import "./style.css";
+import { BreadcrumbProvider } from "./contexts/BreadcrumbContext";
 
 console.log("From main");
 console.log(globalConfig);
@@ -17,6 +19,8 @@ createRoot(document.getElementById("root")!).render(
     }}
     cacheLocation="localstorage"
   >
-    <RouterProvider router={router} />
+    <BreadcrumbProvider>
+      <RouterProvider router={router} />
+    </BreadcrumbProvider>
   </Auth0Provider>
 );
