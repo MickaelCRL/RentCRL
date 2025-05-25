@@ -5,7 +5,7 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { BreadcrumbItem } from "../model/BreadcrumbItem";
+import BreadcrumbItem from "../model/BreadcrumbItem";
 
 type BreadcrumbContextType = {
   breadcrumbs: BreadcrumbItem[];
