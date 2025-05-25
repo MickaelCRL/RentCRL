@@ -25,7 +25,7 @@ export const BreadcrumbProvider = ({ children }: BreadcrumbProviderProps) => {
   const [breadcrumbs, setBreadcrumbsState] = useState<BreadcrumbItem[]>([]);
 
   useEffect(() => {
-    const storedBreadcrumb = localStorage.getItem("breadcrumbContext");
+    const storedBreadcrumb = sessionStorage.getItem("breadcrumbContext");
 
     if (storedBreadcrumb) {
       setBreadcrumbs(JSON.parse(storedBreadcrumb));
@@ -34,7 +34,7 @@ export const BreadcrumbProvider = ({ children }: BreadcrumbProviderProps) => {
 
   const setBreadcrumbs = (breadcrumbs: BreadcrumbItem[]) => {
     setBreadcrumbsState(breadcrumbs);
-    localStorage.setItem("breadcrumbContext", JSON.stringify(breadcrumbs));
+    sessionStorage.setItem("breadcrumbContext", JSON.stringify(breadcrumbs));
   };
 
   return (
