@@ -1,4 +1,3 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import Header from "../components/Header";
 import DashboardLayout from "../components/dashboard/DashboardLayout";
 import { Box } from "@mui/material";
@@ -7,7 +6,6 @@ import { useEffect } from "react";
 import BreadcrumbsNav from "../components/ui/Breadcrumbs";
 
 function Dashboard() {
-  const { isAuthenticated, user } = useAuth0();
   const { breadcrumbs, setBreadcrumbs } = useBreadcrumbContext();
 
   useEffect(() => {
@@ -16,17 +14,12 @@ function Dashboard() {
 
   return (
     <>
-      {isAuthenticated && user && (
-        <>
-          <Header />
-
-          <DashboardLayout>
-            <Box>
-              <BreadcrumbsNav breadcrumbs={breadcrumbs} />
-            </Box>
-          </DashboardLayout>
-        </>
-      )}
+      <Header />
+      <DashboardLayout>
+        <Box>
+          <BreadcrumbsNav breadcrumbs={breadcrumbs} />
+        </Box>
+      </DashboardLayout>
     </>
   );
 }

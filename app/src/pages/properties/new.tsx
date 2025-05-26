@@ -1,14 +1,12 @@
+import { Box } from "@mui/material";
+import { useEffect } from "react";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import Header from "../../components/Header";
 import NewPropertyForm from "../../components/properties/NewPropertyForm";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useBreadcrumbContext } from "../../contexts/BreadcrumbContext";
-import { useEffect } from "react";
-import { Box } from "@mui/material";
 import BreadcrumbsNav from "../../components/ui/Breadcrumbs";
+import { useBreadcrumbContext } from "../../contexts/BreadcrumbContext";
 
 function NewPropertyPage() {
-  const { isAuthenticated, user } = useAuth0();
   const { breadcrumbs, setBreadcrumbs } = useBreadcrumbContext();
 
   useEffect(() => {
@@ -21,17 +19,13 @@ function NewPropertyPage() {
 
   return (
     <>
-      {isAuthenticated && user && (
-        <>
-          <Header />
-          <DashboardLayout>
-            <Box>
-              <BreadcrumbsNav breadcrumbs={breadcrumbs} />
-            </Box>
-            <NewPropertyForm />
-          </DashboardLayout>
-        </>
-      )}
+      <Header />
+      <DashboardLayout>
+        <Box>
+          <BreadcrumbsNav breadcrumbs={breadcrumbs} />
+        </Box>
+        <NewPropertyForm />
+      </DashboardLayout>
     </>
   );
 }
