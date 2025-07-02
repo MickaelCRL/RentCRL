@@ -1,4 +1,6 @@
-﻿using RentCRL.Domain.Users;
+﻿using RentCRL.Domain.Properties;
+using RentCRL.Domain.Users;
+using RentCRL.Infrastructure.Properties;
 using RentCRL.Infrastructure.Users;
 
 namespace RentCRL.Web.DependencyInjection
@@ -11,7 +13,9 @@ namespace RentCRL.Web.DependencyInjection
 
             AddDatabaseConnection(builder, services);
 
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOwnerRepository, OwnerRepository>();
+            services.AddScoped<IPropertyRepository, PropertyRepository>();
         }
 
         public static void AddDatabaseConnection(WebApplicationBuilder builder, IServiceCollection services)

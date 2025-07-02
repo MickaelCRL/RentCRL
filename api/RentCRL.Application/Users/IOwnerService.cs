@@ -6,6 +6,7 @@ namespace RentCRL.Application.Users
     public interface IOwnerService
     {
         Task<Result<Owner>> CreateOwnerAsync(string auth0Id, string firstName, string lastName, string email, string phoneNumber);
-        Task<Result<Owner>> GetOwnerByEmailAsync(string email);
+
+        Task<Result<Owner>> GetOwnerByIdAsync(Guid ownerId);
     }
 }

@@ -3,10 +3,7 @@ import { RouterProvider } from "react-router";
 import { Auth0Provider } from "@auth0/auth0-react";
 import router from "./router";
 import "./style.css";
-import { BreadcrumbProvider } from "./contexts/BreadcrumbContext";
-
-console.log("From main");
-console.log(globalConfig);
+import { UserProvider } from "./contexts/UserContext";
 
 createRoot(document.getElementById("root")!).render(
   <Auth0Provider
@@ -19,8 +16,8 @@ createRoot(document.getElementById("root")!).render(
     }}
     cacheLocation="localstorage"
   >
-    <BreadcrumbProvider>
+    <UserProvider>
       <RouterProvider router={router} />
-    </BreadcrumbProvider>
+    </UserProvider>
   </Auth0Provider>
 );

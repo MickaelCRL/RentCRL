@@ -4,7 +4,7 @@ import { useState } from "react";
 import LogoutButton from "./LogoutButton";
 
 function Profile() {
-  const { user, isAuthenticated } = useAuth0();
+  const { user } = useAuth0();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const open = Boolean(anchorEl);
@@ -19,7 +19,7 @@ function Profile() {
   };
   return (
     <>
-      {isAuthenticated && user && (
+      {user && (
         <>
           <Avatar
             src={user.picture}

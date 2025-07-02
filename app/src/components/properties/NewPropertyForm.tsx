@@ -3,25 +3,34 @@ import { useState } from "react";
 import Property from "../../model/Property";
 import { useNavigate } from "react-router-dom";
 import SuccessNotification from "../ui/SuccessNotification";
+import Address from "../../model/Address";
+import { createPropertyAsync } from "../../services/properties/propertyServices";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useUserContext } from "../../contexts/UserContext";
 
 function NewPropertyForm() {
   const [property, setProperty] = useState<Property>();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [address, setAddress] = useState<Address>();
+  const [successNotificationDisplay, setSnackbarDisplay] = useState(false);
+  const { getAccessTokenSilently } = useAuth0();
+  const { userContext } = useUserContext();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProperty({ ...property, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress({ ...address, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setTimeout(() => {
-      console.log("Property saved:", property);
-      setSnackbarOpen(true);
-      setTimeout(() => {
-        navigate("/properties");
-      }, 1500);
-    }, 500);
+    const newProperty = { ...property, address: address };
+    const token = await getAccessTokenSilently();
+    const ownerId = userContext?.id || "";
+    await createPropertyAsync(ownerId, newProperty, token);
+    navigate("/properties");
   };
 
   return (
@@ -49,48 +58,52 @@ function NewPropertyForm() {
           <TextField
             label="Nom"
             name="name"
-            value={property?.name}
+            value={property?.name || ""}
             onChange={handleChange}
             required
           />
           <TextField
             label="Adresse"
-            name="address"
-            value={property?.address}
-            onChange={handleChange}
+            name="line1"
+            value={address?.line1 || ""}
+            onChange={handleAddressChange}
             required
+          />
+          <TextField
+            label="Adresse 2"
+            name="line2"
+            value={address?.line2 || ""}
+            onChange={handleAddressChange}
           />
           <TextField
             label="Ville"
             name="city"
-            value={property?.city}
-            onChange={handleChange}
+            value={address?.city || ""}
+            onChange={handleAddressChange}
             required
           />
           <TextField
             label="Code postal"
             name="postalCode"
-            value={property?.postalCode}
-            onChange={handleChange}
+            value={address?.postalCode || ""}
+            onChange={handleAddressChange}
+            required
+          />
+          <TextField
+            label="Pays"
+            name="country"
+            value={address?.country || ""}
+            onChange={handleAddressChange}
             required
           />
           <TextField
             label="Surface (m²)"
             name="surface"
             type="number"
-            value={property?.surface}
+            value={property?.surface || ""}
             onChange={handleChange}
             required
           />
-          <TextField
-            label="Prix du loyer (€)"
-            name="rentPrice"
-            type="number"
-            value={property?.rentPrice}
-            onChange={handleChange}
-            required
-          />
-
           <Box mt={3} textAlign="right">
             <Button
               type="submit"
@@ -103,9 +116,9 @@ function NewPropertyForm() {
         </Box>
       </Paper>
       <SuccessNotification
-        open={snackbarOpen}
+        open={successNotificationDisplay}
         message="Propriété ajoutée avec succès !"
-        onClose={() => setSnackbarOpen(false)}
+        onClose={() => setSnackbarDisplay(false)}
       />
     </>
   );

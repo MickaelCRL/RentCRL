@@ -1,4 +1,5 @@
-﻿using RentCRL.Application.Users;
+﻿using RentCRL.Application.Properties;
+using RentCRL.Application.Users;
 
 namespace RentCRL.Web.DependencyInjection
 {   
@@ -8,7 +9,9 @@ namespace RentCRL.Web.DependencyInjection
         {
             var services = builder.Services;
 
+            services.AddTransient<IUserService, UserService>();
             services.AddTransient<IOwnerService, OwnerService>();
+            services.AddTransient<IPropertyService, PropertyService>();
         }
     }
 }

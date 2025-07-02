@@ -1,25 +1,16 @@
-import Header from "../components/Header";
-import DashboardLayout from "../components/dashboard/DashboardLayout";
-import { Box } from "@mui/material";
-import { useBreadcrumbContext } from "../contexts/BreadcrumbContext";
-import { useEffect } from "react";
-import BreadcrumbsNav from "../components/ui/Breadcrumbs";
+import OwnerDashboard from "../components/dashboard/OwnerDashboard";
+import TenantDashboard from "../components/dashboard/TenantDashboard";
+import { useUserContext } from "../contexts/UserContext";
 
 function Dashboard() {
-  const { breadcrumbs, setBreadcrumbs } = useBreadcrumbContext();
-
-  useEffect(() => {
-    setBreadcrumbs([{ label: "Tableau de bord" }, { label: "Accueil" }]);
-  }, []);
-
+  const { userContext } = useUserContext();
   return (
     <>
-      <Header />
-      <DashboardLayout>
-        <Box>
-          <BreadcrumbsNav breadcrumbs={breadcrumbs} />
-        </Box>
-      </DashboardLayout>
+      {userContext?.entityType === "Owner" ? (
+        <OwnerDashboard />
+      ) : userContext?.entityType === "Tenant" ? (
+        <TenantDashboard />
+      ) : null}
     </>
   );
 }

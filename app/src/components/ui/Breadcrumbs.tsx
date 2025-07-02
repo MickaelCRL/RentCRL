@@ -1,10 +1,11 @@
 import { Breadcrumbs, Typography, Link as MuiLink } from "@mui/material";
-import { BreadcrumbItem } from "../../model/BreadcrumbItem";
+import BreadcrumbItem from "../../model/BreadcrumbItem";
 import { Link } from "react-router-dom";
 
 interface BreadcrumbsNavProps {
   breadcrumbs: BreadcrumbItem[];
 }
+
 function BreadcrumbsNav({ breadcrumbs }: BreadcrumbsNavProps) {
   return (
     <Breadcrumbs aria-label="breadcrumb">

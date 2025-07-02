@@ -1,10 +1,9 @@
-﻿using RentCRL.Domain.Results;
+﻿using RentCRL.Domain.Base;
 
 namespace RentCRL.Domain.Users
 {
-    public interface IOwnerRepository
-    {
-        Task<Owner> AddAsync(Owner owner);
+    public interface IOwnerRepository : IEntityRepository<Owner>
+    { 
         Task<Owner> GetByEmailAsync(string email);
     }
 }

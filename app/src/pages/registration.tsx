@@ -14,48 +14,52 @@ import {
 import Header from "../components/Header";
 import Owner from "../model/Owner";
 import Regexes from "../model/Regexes";
-import { fetcherWithToken } from "../utils/fetcher";
+import { useUserContext } from "../contexts/UserContext";
+import { createOwnerAsync } from "../services/users/ownerServices";
 
 const Registration = () => {
-  const { user, getAccessTokenSilently } = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [phone, setPhone] = useState("");
-  const [phoneError, setPhoneError] = useState("");
-  const [owner, setOwner] = useState<Owner>();
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumberError, setPhoneNumberError] = useState("");
+  const { userContext, setUserContext } = useUserContext();
 
   useEffect(() => {
-    console.log(`${globalConfig.apiBaseUrl}/owners`);
-    if (user) {
-      setOwner({
-        auth0Id: user.sub,
-        lastname: user.family_name,
-        firstname: user.given_name,
-        email: user.email,
-        phoneNumber: "",
-      });
+    if (!isAuthenticated) {
+      navigate("/");
     }
-  }, [user]);
+
+    if (isAuthenticated && !userContext?.entityType) {
+      navigate("/select-role");
+    }
+  }, [user, isAuthenticated, navigate]);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhone(e.target.value);
-    if (!phone.match(Regexes.phoneNumber)) {
-      setPhoneError("Numéro de téléphone invalide");
+    setPhoneNumber(e.target.value);
+    if (!phoneNumber.match(Regexes.phoneNumber)) {
+      setPhoneNumberError("Numéro de téléphone invalide");
     } else {
-      setPhoneError("");
-      setOwner({ ...owner, phoneNumber: e.target.value });
+      setPhoneNumberError("");
+      setPhoneNumber(e.target.value);
     }
   };
 
   const handleSubmit = async () => {
-    const ownerUrl = `${globalConfig.apiBaseUrl}/owners`;
-    console.log(`Owner URL: ${ownerUrl}`);
+    const owner: Owner = {
+      auth0Id: user?.sub,
+      lastname: user?.family_name,
+      firstname: user?.given_name,
+      email: user?.email,
+      phoneNumber,
+      entityType: "Owner",
+    };
 
     const token = await getAccessTokenSilently();
     setLoading(true);
 
-    await fetcherWithToken(ownerUrl, token, "POST", { ...owner });
-
+    const response = await createOwnerAsync(owner, token);
+    setUserContext(response);
     setLoading(false);
     navigate("/dashboard");
   };
@@ -109,11 +113,11 @@ const Registration = () => {
                   variant="outlined"
                   label="Téléphone"
                   name="phone"
-                  defaultValue={owner?.phoneNumber}
+                  defaultValue={phoneNumber}
                   onChange={handlePhoneChange}
                   required
-                  error={phoneError ? true : false}
-                  helperText={phoneError}
+                  error={phoneNumberError ? true : false}
+                  helperText={phoneNumberError}
                 />
               </Box>
 
@@ -124,8 +128,8 @@ const Registration = () => {
                   onClick={handleSubmit}
                   disabled={
                     loading ||
-                    owner?.phoneNumber === "" ||
-                    phoneError?.length > 0
+                    phoneNumber === "" ||
+                    phoneNumberError?.length > 0
                   }
                 >
                   {loading ? (

@@ -5,32 +5,30 @@ import { useNavigate } from "react-router-dom";
 import LoginButton from "./components/auth/LoginButton";
 import logo from "./static/img/logo.svg";
 import SpinnerLoading from "./components/ui/SpinnerLoading";
-import { fetcherWithToken } from "./utils/fetcher";
+import { useUserContext } from "./contexts/UserContext";
+import { getUserByEmailAsync } from "./services/users/userServices";
 
 function App() {
   const { isAuthenticated, isLoading, getAccessTokenSilently, user } =
     useAuth0();
+  const { setUserContext } = useUserContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkOwner = async () => {
+    const checkUser = async () => {
       if (!isLoading && isAuthenticated) {
         const token = await getAccessTokenSilently();
-        const ownerUrl = `${globalConfig.apiBaseUrl}/owners`;
-        const email = encodeURIComponent(user?.email || "");
-        const owner = await fetcherWithToken(
-          `${ownerUrl}?email=${email}`,
-          token,
-          "GET"
-        );
-        if (owner) {
+        const email = user?.email || "";
+        const response = await getUserByEmailAsync(email, token);
+        if (response) {
+          setUserContext(response);
           navigate("/dashboard");
         } else {
-          navigate("/registration");
+          navigate("/select-role");
         }
       }
     };
-    checkOwner();
+    checkUser();
   }, [isAuthenticated, isLoading, getAccessTokenSilently, navigate]);
 
   if (isLoading || isAuthenticated) {

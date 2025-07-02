@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using RentCRL.Presentation.Properties;
 using RentCRL.Presentation.Users;
 using RentCRL.Web;
 using RentCRL.Web.DependencyInjection;
@@ -85,6 +86,8 @@ app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapUserEndpoint();
 app.MapOwnerEndpoint();
+app.MapPropertyEndpoint();
 
 app.Run();

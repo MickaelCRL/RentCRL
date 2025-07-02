@@ -18,15 +18,16 @@ namespace RentCRL.Application.Users
             if (response.Result != null)
                 return Result.Failure<Owner>(UserErrors.EmailAlreadyExists);
 
-            var newOwner = new Owner(auth0Id, firstName, lastName, email, phoneNumber);
+            Guid id = Guid.NewGuid();
+            var newOwner = new Owner(id, auth0Id, firstName, lastName, email, phoneNumber);
             return await _ownerRepository.AddAsync(newOwner);
         }
 
-        public async Task<Result<Owner>> GetOwnerByEmailAsync(string email)
+        public async Task<Result<Owner>> GetOwnerByIdAsync(Guid ownerId)
         {
-            var response = _ownerRepository.GetByEmailAsync(email);
+            var response = _ownerRepository.GetByIdAsync(ownerId);
             if (response.Result == null)
-                return Result.Failure<Owner>(UserErrors.CouldNotFindUserWithEmail);
+                return Result.Failure<Owner>("Owner not found");
 
             return await response;
         }

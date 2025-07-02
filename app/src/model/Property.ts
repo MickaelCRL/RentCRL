@@ -1,11 +1,11 @@
+import Address from "./Address";
+
 interface Property {
+  id?: string;
   name?: string;
-  address?: string;
-  city?: string;
-  postalCode?: string;
-  rent?: string;
-  surface?: string;
-  rentPrice?: string;
+  address?: Address;
+  surface?: number;
+  status?: string;
 }
 
 export default Property;

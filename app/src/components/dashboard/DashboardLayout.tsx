@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
+import DescriptionIcon from "@mui/icons-material/Description";
 import LogoutIcon from "@mui/icons-material/Logout";
 import {
   Box,
@@ -55,6 +56,13 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
               <HomeWorkIcon sx={{ color: iconColor }} />
             </ListItemIcon>
             <ListItemText primary="Mes propriétés" />
+          </ListItemButton>
+
+          <ListItemButton onClick={() => navigate("/contracts")}>
+            <ListItemIcon sx={{ color: "#fff" }}>
+              <DescriptionIcon sx={{ color: iconColor }} />
+            </ListItemIcon>
+            <ListItemText primary="Mes contrats" />
           </ListItemButton>
 
           <ListItemButton
