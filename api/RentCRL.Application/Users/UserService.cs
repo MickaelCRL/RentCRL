@@ -11,13 +11,16 @@ namespace RentCRL.Application.Users
         {
             _userRepository = userRepository;
         }
+
         public async Task<Result<User>> GetUserByEmailAsync(string email)
         {
-            var response = _userRepository.GetByEmailAsync(email);
-            if (response.Result == null)
-                return Result.Failure<User>(UserErrors.CouldNotFindUserWithEmail);
+            var user = await _userRepository.GetByEmailAsync(email);
+            if (user == null)
+            {
+                return UserErrors.CouldNotFindUserWithEmail;
+            }
 
-            return await response;
+            return user;
         }
     }
 }

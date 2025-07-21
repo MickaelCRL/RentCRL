@@ -8,7 +8,7 @@ namespace RentCRL.Application.Properties
     {
         Task<Result<Property>> CreatePropertyAsync(string name, decimal surface, string status, Address address, Guid ownerId);
 
-        Task<Result<IEnumerable<Property>>> GetPropertiesByOwnerIdAsync(Guid ownerId);
+        Task<Result<List<Property>>> GetPropertiesByOwnerIdAsync(Guid ownerId);
     }
 
 }

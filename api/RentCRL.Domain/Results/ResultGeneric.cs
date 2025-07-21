@@ -14,5 +14,7 @@
         }
 
         public static implicit operator Result<TValue>(TValue value) => new(value, true, Error.None);
+
+        public static implicit operator Result<TValue>(Error errorMessage) => Failure<TValue>(errorMessage);
     }
 }

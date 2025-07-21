@@ -1,14 +1,11 @@
-﻿using Auth0.AspNetCore.Authentication;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using RentCRL.Application.Properties;
 using RentCRL.Application.Users;
 using RentCRL.Domain.Properties;
-using RentCRL.Domain.Users;
 using RentCRL.Presentation.Addresses;
 using RentCRL.Presentation.Users;
 using System.Security.Claims;

@@ -18,7 +18,7 @@ namespace RentCRL.Infrastructure.Users
                                {
                                    PartitionKey = null
                                })
-                                     .Where(u => u.Email == email && u.EntityType == nameof(Owner) || u.EntityType == nameof(Tenant))
+                                     .Where(u => u.Email == email && (u.EntityType == nameof(Owner) || u.EntityType == nameof(Tenant)))
                                .ToFeedIterator();
 
             var response = await feedIterator.ReadNextAsync();

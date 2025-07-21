@@ -1,8 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
-using Microsoft.Azure.Documents;
 using RentCRL.Domain.Base;
-using RentCRL.Domain.Users;
 
 namespace RentCRL.Infrastructure.Base
 {

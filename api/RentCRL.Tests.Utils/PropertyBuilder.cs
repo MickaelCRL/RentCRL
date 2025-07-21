@@ -4,6 +4,7 @@ using RentCRL.Domain.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace RentCRL.Tests.Utils
     public class PropertyBuilder
     {
         private readonly Fixture _fixture = new();
+        private Guid _id;
         private string _name;
         private decimal _surface;
         private string _status;
@@ -20,11 +22,12 @@ namespace RentCRL.Tests.Utils
 
         private PropertyBuilder()
         {
+            _id = _fixture.Create<Guid>();
             _name = _fixture.Create<string>();
             _surface = _fixture.Create<decimal>();
             _status = _fixture.Create<string>();
             _address = _fixture.Create<Address>();
-            _ownerId = Guid.NewGuid();
+            _ownerId = _fixture.Create<Guid>();
         }
         public static PropertyBuilder Build()
         {
@@ -33,7 +36,7 @@ namespace RentCRL.Tests.Utils
 
         public Property Create()
         {
-            return new Property(_name, _surface, _status, _address, _ownerId);
+            return new Property(_id, _name, _surface, _status, _address, _ownerId);
         }
 
         public PropertyBuilder WithName(string name)

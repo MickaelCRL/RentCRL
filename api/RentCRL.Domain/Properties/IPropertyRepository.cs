@@ -4,6 +4,6 @@ namespace RentCRL.Domain.Properties
 {
     public interface IPropertyRepository : IEntityRepository<Property>
     { 
-        Task<IEnumerable<Property>> GetPropertiesByOwnerIdAsync(Guid ownerId);
+        Task<List<Property>> GetPropertiesByOwnerIdAsync(Guid ownerId);
     }
 }

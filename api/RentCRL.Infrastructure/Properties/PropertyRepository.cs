@@ -11,7 +11,7 @@ namespace RentCRL.Infrastructure.Properties
             : base(cosmosDbService)
         { }
 
-        public async Task<IEnumerable<Property>> GetPropertiesByOwnerIdAsync(Guid ownerId)
+        public async Task<List<Property>> GetPropertiesByOwnerIdAsync(Guid ownerId)
         {
             var feedIterator = _container.GetItemLinqQueryable<Property>(
                               requestOptions: new QueryRequestOptions
