@@ -1,7 +1,6 @@
 ﻿using AutoFixture;
 using Moq;
 using RentCRL.Application.Users;
-using RentCRL.Domain.Results;
 using RentCRL.Domain.Users;
 using RentCRL.Tests.Utils;
 using Shouldly;
@@ -44,7 +43,7 @@ namespace RentCRL.Application.Tests.Unit.Users
         }
 
         [Test]
-        public async Task GetUserByEmailAsync_UserNotExist_ReturnFaillure()
+        public async Task GetUserByEmailAsync_UserNotExist_ReturnFailure()
         {
             // arrange
             var email = _fixture.CreateEmail();
@@ -53,7 +52,7 @@ namespace RentCRL.Application.Tests.Unit.Users
             var response = await _userService.GetUserByEmailAsync(email);
 
             // assert
-            response.IsSuccess.ShouldBe(false);
+            response.IsSuccess.ShouldBeFalse();
             response.Error.ShouldBe(UserErrors.CouldNotFindUserWithEmail);
         }
     }

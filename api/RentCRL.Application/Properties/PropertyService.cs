@@ -25,7 +25,7 @@ namespace RentCRL.Application.Properties
         public async Task<Result<List<Property>>> GetPropertiesByOwnerIdAsync(Guid ownerId)
         {
             var response = await _propertyRepository.GetPropertiesByOwnerIdAsync(ownerId);
-            if (response.Count() == 0)
+            if (response.Count == 0)
                 return Result.Failure<List<Property>>(PropertyErrors.CouldNotFoundPropertiesByOwnerId);
 
             return Result.Success(response);

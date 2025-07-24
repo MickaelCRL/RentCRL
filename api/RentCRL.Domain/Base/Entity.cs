@@ -17,6 +17,7 @@ namespace RentCRL.Domain.Base
         {
             if (id == Guid.Empty)
                 throw new ArgumentException("Id cannot be empty", nameof(id));
+
             if (string.IsNullOrEmpty(entityType))
                 throw new ArgumentException("EntityType cannot be null or empty", nameof(entityType));
 

@@ -27,6 +27,7 @@ namespace RentCRL.Domain.Users
 
             if (!Regexes.PhoneNumber.IsMatch(phoneNumber))
                 throw new ArgumentException("PhoneNumber is not valid.", nameof(phoneNumber));
+
             if (string.IsNullOrEmpty(entityType))
                 throw new ArgumentException("EntityType cannot be null or empty", nameof(entityType));
 

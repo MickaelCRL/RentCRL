@@ -1,35 +1,39 @@
-﻿using RentCRL.Domain.Results;
+﻿using RentCRL.Domain.Base;
+using RentCRL.Domain.Results;
 using RentCRL.Domain.Users;
 
 namespace RentCRL.Application.Users
 {
     public class OwnerService : IOwnerService
     {
+        private readonly IGuidProvider _guidProvider;
         private readonly IOwnerRepository _ownerRepository;
 
-        public OwnerService(IOwnerRepository ownerRepository)
+        public OwnerService(IGuidProvider guidProvider, IOwnerRepository ownerRepository)
         {
+            _guidProvider = guidProvider;
             _ownerRepository = ownerRepository;
         }
 
         public async Task<Result<Owner>> CreateOwnerAsync(string auth0Id, string firstName, string lastName, string email, string phoneNumber)
         {
-            var response = _ownerRepository.GetByEmailAsync(email);
-            if (response.Result != null)
-                return Result.Failure<Owner>(UserErrors.EmailAlreadyExists);
+            var owner = await _ownerRepository.GetByEmailAsync(email);
+            if (owner != null)
+                return UserErrors.EmailAlreadyExists;
 
-            Guid id = Guid.NewGuid();
-            var newOwner = new Owner(id, auth0Id, firstName, lastName, email, phoneNumber);
-            return await _ownerRepository.AddAsync(newOwner);
+            var newOwner = new Owner(_guidProvider.NewGuid(), auth0Id, firstName, lastName, email, phoneNumber);
+            var response = await _ownerRepository.AddAsync(newOwner);
+
+            return response;
         }
 
         public async Task<Result<Owner>> GetOwnerByIdAsync(Guid ownerId)
         {
-            var response = _ownerRepository.GetByIdAsync(ownerId);
-            if (response.Result == null)
-                return Result.Failure<Owner>("Owner not found");
+            var owner = await _ownerRepository.GetByIdAsync(ownerId);
+            if (owner == null)
+                return UserErrors.CouldNotFindUserWithId;
 
-            return await response;
+            return owner;
         }
     }
 }
