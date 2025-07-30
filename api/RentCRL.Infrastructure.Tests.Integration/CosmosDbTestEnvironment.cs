@@ -4,37 +4,43 @@ using RentCRL.Infrastructure.Database;
 
 namespace RentCRL.Infrastructure.Tests.Integration
 {
-    public class CosmosDbTestEnvironment
+    public class CosmosDbTestEnvironment : IDisposable
     {
+        private CosmosDbCreator _cosmosDbCreator;
+
         public CosmosDbSettings Settings { get; private set; }
-        public CosmosClient Client { get; private set;  }
-        public CosmosDbService Service { get; private set; }
+        public CosmosClient Client { get; private set; }
 
-        public CosmosDbTestEnvironment()
+        public async Task EnsureDatabaseAndContainerExistAsync()
         {
-            Settings = LoadSettings();
-            Client = CreateClient();
-            Service = CreateService();
+            InitializeSettings();
+            InitializeClient();
+            InitializeCosmosDbCreator();
+            await _cosmosDbCreator.EnsureDatabaseAndContainerExistAsync();
         }
 
-        public CosmosDbService CreateService()
+        public async Task DeleteDatabaseAsync()
         {
-            return new CosmosDbService(Settings, Client);
+            await Client.GetDatabase(Settings.DatabaseId).DeleteAsync();
         }
 
-        public CosmosClient CreateClient()
+        public Container GetEntitiesContainer()
         {
-            return new CosmosClient(Settings.EndpointUri, Settings.PrimaryKey);
+            return Client.GetContainer(Settings.DatabaseId, ContainersNames.Entities);
         }
 
-        public CosmosDbSettings LoadSettings()
+        public void Dispose()
+        {
+            _cosmosDbCreator = null;
+            Client.Dispose();
+        }
+
+        private void InitializeSettings()
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.integration.json", optional: false)
                 .Build();
-
-            Console.WriteLine(AppContext.BaseDirectory);
 
             var cosmosDbSetting = configuration
                 .GetSection(nameof(CosmosDbSettings))
@@ -42,13 +48,18 @@ namespace RentCRL.Infrastructure.Tests.Integration
 
             cosmosDbSetting.DatabaseId = $"Test_{Guid.NewGuid()}";
 
-            return cosmosDbSetting;
+            Settings = cosmosDbSetting;
         }
 
-        public async Task DeleteAndDisposeAsync()
+        private void InitializeClient()
         {
-            await Client.GetDatabase(Settings.DatabaseId).DeleteAsync();
-            Client.Dispose();
+            Client = new CosmosClient(Settings.EndpointUri, Settings.PrimaryKey);
         }
+
+        private void InitializeCosmosDbCreator()
+        {
+            _cosmosDbCreator = new CosmosDbCreator(Settings, Client);
+        }
+
     }
 }

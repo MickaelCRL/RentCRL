@@ -1,23 +1,20 @@
-﻿using System.ComponentModel;
-
-namespace RentCRL.Infrastructure.Tests.Integration
+﻿namespace RentCRL.Infrastructure.Tests.Integration
 {
     public class BaseTests
     {
-        protected CosmosDbTestEnvironment _environment;
-        protected CosmosDbService _service;
+        protected CosmosDbTestEnvironment _cosmosDbTestEnvironment;
 
-        public async Task BaseSetUp()
+        protected async Task BaseSetUp()
         {
-            _environment = new CosmosDbTestEnvironment();
-            _service = _environment.Service;
-            await _service.EnsureDatabaseAndContainerExistAsync();
+            _cosmosDbTestEnvironment = new CosmosDbTestEnvironment();
+            await _cosmosDbTestEnvironment.EnsureDatabaseAndContainerExistAsync();
         }
 
         [TearDown]
         public async Task Teardown()
         {
-            await _environment.DeleteAndDisposeAsync();
+            await _cosmosDbTestEnvironment.DeleteDatabaseAsync();
+            _cosmosDbTestEnvironment.Dispose();
         }
     }
 }

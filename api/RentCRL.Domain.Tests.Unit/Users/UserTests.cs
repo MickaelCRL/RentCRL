@@ -158,6 +158,37 @@ namespace RentCRL.Domain.Tests.Unit.Users
             // Assert
             action.ShouldThrow<ArgumentException>();
         }
+
+        [Test, AutoData]
+        public void Constructor_IfEntity_ThrowArgumentException(
+            Guid id,
+            string auth0Id,
+            string firstName,
+            string lastName,
+            string entityType
+        )
+        {
+            // Arrange
+            var email = _fixture.CreateEmail();
+            var phoneNumber = _fixture.CreatePhoneNumber();
+
+            // Act
+            var action = () =>
+            {
+                var owner = new User(
+                    id,
+                    auth0Id,
+                    firstName,
+                    lastName,
+                    email,
+                    phoneNumber,
+                    entityType
+                );
+            };
+
+            // Assert
+            action.ShouldThrow<ArgumentException>();
+        }
         #endregion
     }
 }

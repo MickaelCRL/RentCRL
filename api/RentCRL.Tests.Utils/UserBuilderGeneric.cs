@@ -65,7 +65,10 @@ namespace RentCRL.Tests.Utils
         }
 
         public TBuilder WithUsertype(string userType) 
-        { 
+        {
+            if (userType != nameof(Tenant) && userType != nameof(Owner))
+                throw new ArgumentException($"UserType must be {nameof(Tenant)} or {nameof(Owner)}");
+
             _userType = userType;
             return GetBuilder();
         }

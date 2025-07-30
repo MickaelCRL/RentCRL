@@ -11,7 +11,7 @@ namespace RentCRL.Infrastructure.Tests.Integration
         [SetUp]
         public void Setup() 
         {
-            _propertyRepository = new PropertyRepository(_environment.Settings, _environment.Client);
+            _propertyRepository = new PropertyRepository(_cosmosDbTestEnvironment.Settings, _cosmosDbTestEnvironment.Client);
         }
 
         [Test, AutoData]

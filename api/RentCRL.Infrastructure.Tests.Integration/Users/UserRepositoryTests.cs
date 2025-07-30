@@ -17,7 +17,7 @@ namespace RentCRL.Infrastructure.Tests.Integration.Users
             await BaseSetUp();
 
             _fixture = new Fixture();
-            _userRepository = new UserRepository(_environment.Settings, _environment.Client);
+            _userRepository = new UserRepository(_cosmosDbTestEnvironment.Settings, _cosmosDbTestEnvironment.Client);
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace RentCRL.Infrastructure.Tests.Integration.Users
                 .WithUsertype(nameof(Owner))
                 .Create();
 
-            var container = _service.GetEntitiesContainer();
+            var container = _cosmosDbTestEnvironment.GetEntitiesContainer();
 
             await container.CreateItemAsync(user1);
             await container.CreateItemAsync(user2);
@@ -59,7 +59,7 @@ namespace RentCRL.Infrastructure.Tests.Integration.Users
                 .WithUsertype(nameof(Tenant))
                 .Create();
 
-            var container = _service.GetEntitiesContainer();
+            var container = _cosmosDbTestEnvironment.GetEntitiesContainer();
 
             await container.CreateItemAsync(user1);
             await container.CreateItemAsync(user2);

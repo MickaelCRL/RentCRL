@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using RentCRL.Domain.Users;
 using RentCRL.Infrastructure.Users;
 using RentCRL.Tests.Utils;
 using Shouldly;
@@ -16,7 +15,7 @@ namespace RentCRL.Infrastructure.Tests.Integration.Users
         {
             await BaseSetUp();
             _fixture = new Fixture();
-            _ownerRepository = new OwnerRepository(_environment.Settings, _environment.Client);
+            _ownerRepository = new OwnerRepository(_cosmosDbTestEnvironment.Settings, _cosmosDbTestEnvironment.Client);
         }
 
         [Test]
@@ -30,7 +29,7 @@ namespace RentCRL.Infrastructure.Tests.Integration.Users
                 .WithEmail(email)
                 .Create();
 
-            var container = _service.GetEntitiesContainer();
+            var container = _cosmosDbTestEnvironment.GetEntitiesContainer();
 
             await container.CreateItemAsync(owner1);
             await container.CreateItemAsync(owner2);

@@ -63,7 +63,7 @@ builder.RegisterPresentationServices();
 
 var app = builder.Build();
 
-var cosmosDbService = app.Services.GetService<CosmosDbService>();
+var cosmosDbService = app.Services.GetService<CosmosDbCreator>();
 cosmosDbService.EnsureDatabaseAndContainerExistAsync()
     .GetAwaiter()
     .GetResult();

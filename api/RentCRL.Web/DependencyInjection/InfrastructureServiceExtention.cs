@@ -17,7 +17,7 @@ namespace RentCRL.Web.DependencyInjection
 
             AddDatabaseConnection(builder);
 
-            services.AddTransient<CosmosDbService>();
+            services.AddTransient<CosmosDbCreator>();
             services.AddScoped<IGuidProvider, GuidProvider>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOwnerRepository, OwnerRepository>();

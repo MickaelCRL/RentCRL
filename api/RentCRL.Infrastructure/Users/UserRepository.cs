@@ -14,13 +14,13 @@ namespace RentCRL.Infrastructure.Users
 
         public async Task<Domain.Users.User> GetByEmailAsync(string email)
         {
-            var feedIterator = GetContainer().GetItemLinqQueryable<Domain.Users.User>(
-                               requestOptions: new QueryRequestOptions
-                               {
-                                   PartitionKey = null
-                               })
-                               .Where(u => u.Email == email && (u.EntityType == nameof(Owner) || u.EntityType == nameof(Tenant)))
-                               .ToFeedIterator();
+            var feedIterator = GetContainer()
+                .GetItemLinqQueryable<Domain.Users.User>(requestOptions: new QueryRequestOptions
+                {
+                    PartitionKey = null
+                })
+                .Where(u => u.Email == email && (u.EntityType == nameof(Owner) || u.EntityType == nameof(Tenant)))
+                .ToFeedIterator();
 
             var response = await feedIterator.ReadNextAsync();
             return response.SingleOrDefault();
