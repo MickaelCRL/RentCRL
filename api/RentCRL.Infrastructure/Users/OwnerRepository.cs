@@ -1,24 +1,25 @@
-﻿using RentCRL.Domain.Users;
-using Microsoft.Azure.Cosmos;
+﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
+using RentCRL.Domain.Users;
 using RentCRL.Infrastructure.Base;
+using RentCRL.Infrastructure.Database;
 
 namespace RentCRL.Infrastructure.Users
 {
     public class OwnerRepository : EntityRepository<Owner>, IOwnerRepository
     {
-        public OwnerRepository(CosmosDbService cosmosDbService)
-            : base(cosmosDbService)
+        public OwnerRepository(CosmosDbSettings cosmosDbSettings, CosmosClient cosmosClient)
+            : base(cosmosDbSettings, cosmosClient)
         { }
 
         public async Task<Owner> GetByEmailAsync(string email)
         {
-            var feedIterator = _container.GetItemLinqQueryable<Owner>(
+            var feedIterator = GetContainer().GetItemLinqQueryable<Owner>(
                               requestOptions: new QueryRequestOptions
                               {
                                   PartitionKey = null
                               })
-                                    .Where(u => u.Email == email && u.EntityType == nameof(Owner))
+                              .Where(u => u.Email == email && u.EntityType == nameof(Owner))
                               .ToFeedIterator();
 
             var response = await feedIterator.ReadNextAsync();

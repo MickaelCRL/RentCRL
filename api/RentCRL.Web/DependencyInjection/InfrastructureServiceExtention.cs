@@ -1,7 +1,9 @@
-﻿using RentCRL.Domain.Base;
+﻿using Microsoft.Azure.Cosmos;
+using RentCRL.Domain.Base;
 using RentCRL.Domain.Properties;
 using RentCRL.Domain.Users;
 using RentCRL.Infrastructure.Base;
+using RentCRL.Infrastructure.Database;
 using RentCRL.Infrastructure.Properties;
 using RentCRL.Infrastructure.Users;
 
@@ -13,20 +15,23 @@ namespace RentCRL.Web.DependencyInjection
         {
             var services = builder.Services;
 
-            AddDatabaseConnection(builder, services);
+            AddDatabaseConnection(builder);
 
+            services.AddTransient<CosmosDbService>();
             services.AddScoped<IGuidProvider, GuidProvider>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOwnerRepository, OwnerRepository>();
             services.AddScoped<IPropertyRepository, PropertyRepository>();
         }
 
-        public static void AddDatabaseConnection(WebApplicationBuilder builder, IServiceCollection services)
+        public static void AddDatabaseConnection(WebApplicationBuilder builder)
         {
-            var endpoint = builder.Configuration["CosmosDB:EndpointUri"];
-            var primaryKey = builder.Configuration["CosmosDB:PrimaryKey"];
-            var database = builder.Configuration["CosmosDB:DatabaseName"];
-            services.AddSingleton(new CosmosDbService(endpoint, primaryKey, database));
+            var cosmosDbSettingsSection = builder.Configuration.GetSection(nameof(CosmosDbSettings));
+            var cosmosDbSettings = cosmosDbSettingsSection.Get<CosmosDbSettings>();
+
+            builder.Services.AddSingleton(cosmosDbSettings);
+
+            builder.Services.AddSingleton(new CosmosClient(cosmosDbSettings.EndpointUri, cosmosDbSettings.PrimaryKey));
         }
     }
 }

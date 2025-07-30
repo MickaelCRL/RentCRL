@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using AutoFixture.NUnit3;
+﻿using AutoFixture.NUnit3;
 using RentCRL.Domain.Properties;
 using RentCRL.Tests.Utils;
 using Shouldly;
@@ -9,17 +8,11 @@ namespace RentCRL.Domain.Tests.Unit.Properties
     [TestFixture]
     public class PropertyTests
     {
-        private Fixture _fixture;
-
-        [SetUp]
-        public void Setup()
-        {
-            _fixture = new();
-        }
         #region Constructor
         [Test, AutoData]
         public void Constructor_ValidArgument_CreateProperty
         (
+            Guid id,
             string name,
             decimal surface,
             string status,
@@ -30,7 +23,7 @@ namespace RentCRL.Domain.Tests.Unit.Properties
             // Arrange
 
             // Act
-            var property = new Property(name, surface, status, address, ownerId);
+            var property = new Property(id, name, surface, status, address, ownerId);
 
             // Assert
             property.ShouldNotBeNull();

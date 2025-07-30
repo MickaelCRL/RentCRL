@@ -1,24 +1,38 @@
 ﻿using Microsoft.Azure.Cosmos;
+using RentCRL.Infrastructure.Database;
 
 public class CosmosDbService
 {
+    private readonly CosmosDbSettings _settings;
     private readonly CosmosClient _client;
-    private readonly string _databaseId;
 
-    public CosmosDbService(string endpoint, string key, string databaseId)
+    public CosmosDbService(CosmosDbSettings settings, CosmosClient client)
     {
-        _client = new CosmosClient(endpoint, key);
-        _databaseId = databaseId;
+        _settings = settings;
+        _client = client;
     }
 
-    public async Task<Database> GetDatabase()
+    public Container GetEntitiesContainer()
     {
-        return await _client.CreateDatabaseIfNotExistsAsync(_databaseId);
+        return _client.GetContainer(_settings.DatabaseId, ContainersNames.Entities);
     }
 
-    public async Task<Container> GetContainer(string containerId)
+    public async Task EnsureDatabaseAndContainerExistAsync()
     {
-        var database = await GetDatabase();
-        return await database.CreateContainerIfNotExistsAsync(id: containerId, partitionKeyPath: "/id");
+        var database = await CreateDatabaseIfNotExistsAsync();
+        await CreateContainerIfNotExistsAsync(database);
+    }
+
+    private async Task<Database> CreateDatabaseIfNotExistsAsync()
+    {
+        return await _client.CreateDatabaseIfNotExistsAsync(_settings.DatabaseId);
+    }
+
+    private static async Task CreateContainerIfNotExistsAsync(Database database)
+    {
+        foreach(var partitionKey in ContainersNames.PartitionKeys)
+        {
+            await database.CreateContainerIfNotExistsAsync(id: partitionKey.Key, partitionKeyPath: partitionKey.Value);
+        }
     }
 }

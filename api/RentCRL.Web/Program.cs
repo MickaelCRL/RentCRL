@@ -63,6 +63,11 @@ builder.RegisterPresentationServices();
 
 var app = builder.Build();
 
+var cosmosDbService = app.Services.GetService<CosmosDbService>();
+cosmosDbService.EnsureDatabaseAndContainerExistAsync()
+    .GetAwaiter()
+    .GetResult();
+
 app.MapGet("/", () => Results.Ok("OK"));
 
 

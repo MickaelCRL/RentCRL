@@ -2,18 +2,19 @@
 using Microsoft.Azure.Cosmos.Linq;
 using RentCRL.Domain.Properties;
 using RentCRL.Infrastructure.Base;
+using RentCRL.Infrastructure.Database;
 
 namespace RentCRL.Infrastructure.Properties
 {
     public class PropertyRepository : EntityRepository<Property>, IPropertyRepository
     {
-        public PropertyRepository(CosmosDbService cosmosDbService) 
-            : base(cosmosDbService)
+        public PropertyRepository(CosmosDbSettings cosmosDbSettings, CosmosClient cosmosClient) 
+            : base(cosmosDbSettings, cosmosClient)
         { }
 
         public async Task<List<Property>> GetPropertiesByOwnerIdAsync(Guid ownerId)
         {
-            var feedIterator = _container.GetItemLinqQueryable<Property>(
+            var feedIterator = GetContainer().GetItemLinqQueryable<Property>(
                               requestOptions: new QueryRequestOptions
                               {
                                   PartitionKey = null
@@ -23,6 +24,5 @@ namespace RentCRL.Infrastructure.Properties
             var response = await feedIterator.ReadNextAsync();
             return response.ToList();
         }
-
     }
 }

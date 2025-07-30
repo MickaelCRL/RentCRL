@@ -21,7 +21,6 @@ namespace RentCRL.Presentation.Tests.Unit.Properties
                 _fixture.Create<Guid>(),
                 _fixture.Create<string>(),
                 _fixture.Create<decimal>(),
-                _fixture.Create<decimal>(),
                 _fixture.Create<string>(),
                 _fixture.Create<AddressModel>(),
                 _fixture.Create<Guid>()
@@ -50,14 +49,6 @@ namespace RentCRL.Presentation.Tests.Unit.Properties
             var propertyModel = _propertyModel with { Surface = -1 };
             var result = _validator.TestValidate(propertyModel);
             result.ShouldHaveValidationErrorFor(p => p.Surface);
-        }
-
-        [Test]
-        public void Validate_RentIsNegative_Error()
-        {
-            var propertyModel = _propertyModel with { Rent = -1 };
-            var result = _validator.TestValidate(propertyModel);
-            result.ShouldHaveValidationErrorFor(p => p.Rent);
         }
 
         [Test]

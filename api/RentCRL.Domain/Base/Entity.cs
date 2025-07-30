@@ -7,8 +7,12 @@ namespace RentCRL.Domain.Base
         [JsonProperty("id")]
         public Guid Id { get; private set; }
         public string EntityType { get; }
-        public DateTimeOffset? Created { get; }
-        public DateTimeOffset? Modified { get; }
+
+        [JsonProperty("created")]
+        public DateTimeOffset? Created { get; protected set; }
+
+        [JsonProperty("modified")]
+        public DateTimeOffset? Modified { get; protected set; }
 
         protected Entity(
             Guid id,
