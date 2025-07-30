@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using RentCRL.Domain.Base;
+﻿using RentCRL.Domain.Base;
 namespace RentCRL.Domain.Users
 {
     public class User : Entity
@@ -12,6 +11,27 @@ namespace RentCRL.Domain.Users
 
         public User(Guid id, string auth0Id, string firstName, string lastName, string email, string phoneNumber, string entityType)
             : base(id, entityType)
+        {
+            InitializeProperties(auth0Id, firstName, lastName, email, phoneNumber, entityType);
+        }
+
+        // Contructor for database
+        public User(
+            Guid id,
+            string auth0Id,
+            string firstName,
+            string lastName,
+            string email,
+            string phoneNumber,
+            string entityType,
+            DateTimeOffset? created,
+            DateTimeOffset? modified
+        ) : base(id, entityType, created, modified)
+        {
+            InitializeProperties(auth0Id, firstName, lastName, email, phoneNumber, entityType);
+        }
+
+        private void InitializeProperties(string auth0Id, string firstName, string lastName, string email, string phoneNumber, string entityType)
         {
             if (string.IsNullOrEmpty(auth0Id))
                 throw new ArgumentException("Auth0Id cannot be null.", nameof(auth0Id));
