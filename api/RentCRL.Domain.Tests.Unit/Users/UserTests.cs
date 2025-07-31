@@ -32,7 +32,7 @@ namespace RentCRL.Domain.Tests.Unit.Users
             var phoneNumber = _fixture.CreatePhoneNumber();
 
             // Act
-            var user = new User(id, auth0Id, firstName, lastName, email, phoneNumber, nameof(User));
+            var user = new User(id, auth0Id, firstName, lastName, email, phoneNumber, nameof(Owner));
 
             // Assert
             user.ShouldNotBeNull();
@@ -41,64 +41,128 @@ namespace RentCRL.Domain.Tests.Unit.Users
             user.FirstName.ShouldBe(firstName);
             user.LastName.ShouldBe(lastName);
             user.Email.ShouldBe(email);
-            user.EntityType.ShouldBe(nameof(User));
+            user.EntityType.ShouldBe(nameof(Owner));
             user.PhoneNumber.ShouldBe(phoneNumber);
         }
 
-        [Test]
-        public void Constructor_EmptyId_ThrowArgumentException()
+        [Test, AutoData]
+        public void Constructor_EmptyId_ThrowArgumentException
+        (
+            string auth0Id,
+            string firstName,
+            string lastName
+        )
         {
+            var id = Guid.Empty;
+            var email = _fixture.CreateEmail();
+            var phoneNumber = _fixture.CreatePhoneNumber();
+
             // Act
             var action = () =>
             {
-                var owner = UserBuilder.Build()
-                                          .WithId(Guid.Empty)
-                                          .Create();
+                var user = new User
+                (
+                    id,
+                    auth0Id,
+                    firstName,
+                    lastName,
+                    email,
+                    phoneNumber,
+                    nameof(Owner)
+                );
             };
 
             // Assert
             action.ShouldThrow<ArgumentException>();
         }
 
-        [Test]
-        public void Constructor_NullOrEmptyAuth0Id_ThrowArgumentException()
+        [Test, AutoData]
+        public void Constructor_NullOrEmptyAuth0Id_ThrowArgumentException
+        (
+            Guid id,
+            string firstName,
+            string lastName
+        )
         {
+            var email = _fixture.CreateEmail();
+            var phoneNumber = _fixture.CreatePhoneNumber();
+            var auth0Id = string.Empty;
+
             // Act 
             var action = () =>
             {
-                var user = UserBuilder.Build()
-                                          .WithAuth0Id(string.Empty)
-                                          .Create();
+                var user = new User
+                (
+                    id,
+                    auth0Id,
+                    firstName,
+                    lastName,
+                    email,
+                    phoneNumber,
+                    nameof(Owner)
+                );
             };
 
             // Assert
             action.ShouldThrow<ArgumentException>();
         }
 
-        [Test]
-        public void Constructor_NullOrEmptyFirstName_ThrowArgumentException()
+        [Test, AutoData]
+        public void Constructor_NullOrEmptyFirstName_ThrowArgumentException
+        (
+            Guid id,
+            string auth0Id,
+            string lastName
+        )
         {
+            var email = _fixture.CreateEmail();
+            var phoneNumber = _fixture.CreatePhoneNumber();
+            var firstName = string.Empty;
+
             // Act
             var action = () =>
             {
-                var owner = UserBuilder.Build()
-                                          .WithFirstName(string.Empty)
-                                          .Create();
+                var user = new User
+               (
+                   id,
+                   auth0Id,
+                   firstName,
+                   lastName,
+                   email,
+                   phoneNumber,
+                   nameof(Owner)
+               );
             };
 
             // Assert
             action.ShouldThrow<ArgumentException>();
         }
 
-        [Test]
-        public void Constructor_NullOrEmptyLastName_ThrowArgumentException()
+        [Test, AutoData]
+        public void Constructor_NullOrEmptyLastName_ThrowArgumentException
+         (
+            Guid id,
+            string auth0Id,
+            string firstName
+        )
         {
+            var email = _fixture.CreateEmail();
+            var phoneNumber = _fixture.CreatePhoneNumber();
+            var lastName = string.Empty;
+
             // Act
             var action = () =>
             {
-                var owner = UserBuilder.Build()
-                                          .WithLastName(string.Empty)
-                                          .Create();
+                var user = new User
+               (
+                   id,
+                   auth0Id,
+                   firstName,
+                   lastName,
+                   email,
+                   phoneNumber,
+                   nameof(Owner)
+               );
             };
 
             // Assert
@@ -113,12 +177,25 @@ namespace RentCRL.Domain.Tests.Unit.Users
             string email
         )
         {
+            var id = Guid.NewGuid();
+            var auth0Id = _fixture.Create<string>();
+            var firstName = _fixture.Create<string>();
+            var lastName = _fixture.Create<string>();
+            var phoneNumber = _fixture.CreatePhoneNumber();
+
             // Act
             var action = () =>
             {
-                var owner = UserBuilder.Build()
-                                          .WithEmail(email)
-                                          .Create();
+                var user = new User
+               (
+                   id,
+                   auth0Id,
+                   firstName,
+                   lastName,
+                   email,
+                   phoneNumber,
+                   nameof(Owner)
+               );
             };
 
             // Assert
@@ -132,27 +209,25 @@ namespace RentCRL.Domain.Tests.Unit.Users
             string phoneNumber
         )
         {
+            var id = Guid.NewGuid();
+            var auth0Id = _fixture.Create<string>();
+            var firstName = _fixture.Create<string>();
+            var lastName = _fixture.Create<string>();
+            var email = _fixture.CreateEmail();
+
             // Act
             var action = () =>
             {
-                var owner = UserBuilder.Build()
-                          .WithPhoneNumber(phoneNumber)
-                          .Create();
-            };
-
-            // Assert
-            action.ShouldThrow<ArgumentException>();
-        }
-
-        [Test]
-        public void Constructor_NullOrEmptyUserType_ThrowArgumentException()
-        {
-            // Act
-            var action = () =>
-            {
-                var owner = UserBuilder.Build()
-                                          .WithUsertype(string.Empty)
-                                          .Create();
+                var user = new User
+                 (
+                     id,
+                     auth0Id,
+                     firstName,
+                     lastName,
+                     email,
+                     phoneNumber,
+                     nameof(Owner)
+                 );
             };
 
             // Assert
@@ -160,7 +235,39 @@ namespace RentCRL.Domain.Tests.Unit.Users
         }
 
         [Test, AutoData]
-        public void Constructor_IfEntity_ThrowArgumentException(
+        public void Constructor_NullOrEmptyUserType_ThrowArgumentException
+        (
+             Guid id,
+             string auth0Id,
+             string firstName,
+             string lastName,
+             string email,
+             string phoneNumber
+        )
+        {
+            var userType = string.Empty;
+
+            // Act
+            var action = () =>
+            {
+                var user = new User
+               (
+                   id,
+                   auth0Id,
+                   firstName,
+                   lastName,
+                   email,
+                   phoneNumber,
+                   userType
+               );
+            };
+
+            // Assert
+            action.ShouldThrow<ArgumentException>();
+        }
+
+        [Test, AutoData]
+        public void Constructor_EntityTypeNotInUserTypes_ThrowArgumentException(
             Guid id,
             string auth0Id,
             string firstName,
