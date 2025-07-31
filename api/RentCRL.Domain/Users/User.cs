@@ -1,4 +1,5 @@
-﻿using RentCRL.Domain.Base;
+﻿using Newtonsoft.Json;
+using RentCRL.Domain.Base;
 namespace RentCRL.Domain.Users
 {
     public class User : Entity
@@ -16,6 +17,7 @@ namespace RentCRL.Domain.Users
         }
 
         // Contructor for database
+        [JsonConstructor]
         public User(
             Guid id,
             string auth0Id,
