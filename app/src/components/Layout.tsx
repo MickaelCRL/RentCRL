@@ -5,22 +5,20 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { getUserByEmailAsync } from "../services/users/userServices";
 
 const Layout = () => {
-  const { user, isLoading, isAuthenticated, getAccessTokenSilently } =
-    useAuth0();
+  const { user, isLoading, isAuthenticated } = useAuth0();
   const { userContext, setUserContext } = useUserContext();
   const navigate = useNavigate();
 
   const fetchAndSetUser = useCallback(async () => {
-    const token = await getAccessTokenSilently();
     const email = user?.email || "";
-    const fetchedUser = await getUserByEmailAsync(email, token);
+    const fetchedUser = await getUserByEmailAsync(email);
 
     if (!fetchedUser) {
       return;
     }
 
     setUserContext(fetchedUser);
-  }, [user?.email, getAccessTokenSilently, navigate, setUserContext]);
+  }, [user?.email, navigate, setUserContext]);
 
   useEffect(() => {
     if (!isLoading) {

@@ -1,9 +1,7 @@
 import Owner from "../../model/Owner";
-import { fetcherWithToken } from "../../utils/fetcher";
+import api from "../../api";
 
-const ownerUrl = `${globalConfig.apiBaseUrl}/owners`;
-
-export async function createOwnerAsync(owner: Owner, token: string) {
-  const response = await fetcherWithToken(ownerUrl, token, "POST", owner);
-  return response;
+export async function createOwnerAsync(owner: Owner) {
+  const response = await api.post("/owners", owner);
+  return response.data;
 }

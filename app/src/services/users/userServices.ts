@@ -1,13 +1,7 @@
-import { fetcherWithToken } from "../../utils/fetcher";
+import api from "../../api";
 
-const userUrl = `${globalConfig.apiBaseUrl}/users`;
-
-export async function getUserByEmailAsync(email: string, token: string) {
+export async function getUserByEmailAsync(email: string) {
   const emailEncode = encodeURIComponent(email);
-  const response = await fetcherWithToken(
-    `${userUrl}?email=${emailEncode}`,
-    token,
-    "GET"
-  );
-  return response;
+  const response = await api.get(`/users?email=${emailEncode}`);
+  return response.data;
 }

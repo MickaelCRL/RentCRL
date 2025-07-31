@@ -9,17 +9,15 @@ import { useUserContext } from "./contexts/UserContext";
 import { getUserByEmailAsync } from "./services/users/userServices";
 
 function App() {
-  const { isAuthenticated, isLoading, getAccessTokenSilently, user } =
-    useAuth0();
+  const { isAuthenticated, isLoading, user } = useAuth0();
   const { setUserContext } = useUserContext();
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkUser = async () => {
       if (!isLoading && isAuthenticated) {
-        const token = await getAccessTokenSilently();
         const email = user?.email || "";
-        const response = await getUserByEmailAsync(email, token);
+        const response = await getUserByEmailAsync(email);
         if (response) {
           setUserContext(response);
           navigate("/dashboard");
@@ -29,7 +27,7 @@ function App() {
       }
     };
     checkUser();
-  }, [isAuthenticated, isLoading, getAccessTokenSilently, navigate]);
+  }, [isAuthenticated, isLoading, navigate]);
 
   if (isLoading || isAuthenticated) {
     return <SpinnerLoading />;

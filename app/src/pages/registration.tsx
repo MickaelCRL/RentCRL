@@ -18,7 +18,7 @@ import { useUserContext } from "../contexts/UserContext";
 import { createOwnerAsync } from "../services/users/ownerServices";
 
 const Registration = () => {
-  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -55,10 +55,9 @@ const Registration = () => {
       entityType: "Owner",
     };
 
-    const token = await getAccessTokenSilently();
     setLoading(true);
 
-    const response = await createOwnerAsync(owner, token);
+    const response = await createOwnerAsync(owner);
     setUserContext(response);
     setLoading(false);
     navigate("/dashboard");

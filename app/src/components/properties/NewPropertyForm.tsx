@@ -5,14 +5,12 @@ import { useNavigate } from "react-router-dom";
 import SuccessNotification from "../ui/SuccessNotification";
 import Address from "../../model/Address";
 import { createPropertyAsync } from "../../services/properties/propertyServices";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useUserContext } from "../../contexts/UserContext";
 
 function NewPropertyForm() {
   const [property, setProperty] = useState<Property>();
   const [address, setAddress] = useState<Address>();
   const [successNotificationDisplay, setSnackbarDisplay] = useState(false);
-  const { getAccessTokenSilently } = useAuth0();
   const { userContext } = useUserContext();
   const navigate = useNavigate();
 
@@ -27,9 +25,8 @@ function NewPropertyForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newProperty = { ...property, address: address };
-    const token = await getAccessTokenSilently();
     const ownerId = userContext?.id || "";
-    await createPropertyAsync(ownerId, newProperty, token);
+    await createPropertyAsync(ownerId, newProperty);
     navigate("/properties");
   };
 

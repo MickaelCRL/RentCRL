@@ -1,4 +1,3 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
@@ -13,7 +12,6 @@ import { getPropertiesByOwnerIdAsync } from "../services/properties/propertyServ
 function Properties() {
   const { userContext } = useUserContext();
   const ownerId = userContext?.id || "";
-  const { getAccessTokenSilently } = useAuth0();
   const [properties, setProperties] = useState<Property[]>([]);
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -23,14 +21,13 @@ function Properties() {
 
   useEffect(() => {
     const fetchProperties = async () => {
-      const token = await getAccessTokenSilently();
-      const res = await getPropertiesByOwnerIdAsync(ownerId, token);
+      const res = await getPropertiesByOwnerIdAsync(ownerId);
       setProperties(res);
     };
     if (ownerId) {
       fetchProperties();
     }
-  }, [ownerId, getAccessTokenSilently]);
+  }, [ownerId]);
 
   return (
     <>
