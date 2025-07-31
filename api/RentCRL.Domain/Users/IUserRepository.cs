@@ -6,5 +6,4 @@ namespace RentCRL.Domain.Users
     {
         Task<User> GetByEmailAsync(string email);
     }
-
 }

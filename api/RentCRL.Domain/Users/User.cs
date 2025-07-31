@@ -54,7 +54,7 @@ namespace RentCRL.Domain.Users
                 throw new ArgumentException("EntityType cannot be null or empty", nameof(entityType));
 
             if (!UserTypes.AllTypes.Contains(entityType))
-                throw new ArgumentException($"UserType must be {nameof(User)}, {nameof(Tenant)} or {nameof(Owner)}");
+                throw new ArgumentException($"UserType must be {nameof(Tenant)} or {nameof(Owner)}");
 
             Auth0Id = auth0Id;
             FirstName = firstName;

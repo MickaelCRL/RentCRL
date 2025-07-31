@@ -4,7 +4,6 @@
     {
         private static readonly IReadOnlyCollection<string> _allTypes =
         [
-            nameof(User),
             nameof(Tenant),
             nameof(Owner)
         ];

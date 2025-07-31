@@ -1,11 +1,6 @@
 ﻿using AutoFixture;
 using FluentValidation.TestHelper;
 using RentCRL.Presentation.Addresses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RentCRL.Presentation.Tests.Unit.Addresses
 {
@@ -28,7 +23,6 @@ namespace RentCRL.Presentation.Tests.Unit.Addresses
               _fixture.Create<string>(),
               _fixture.Create<string>()
             );
-
         }
 
         [Test]

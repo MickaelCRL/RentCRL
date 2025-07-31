@@ -32,6 +32,8 @@ namespace RentCRL.Infrastructure.Tests.Integration.Properties
                 .WithOwnerId(ownerId)
                 .Create();
 
+            var expectedResult = new List<Property> { expectedProperty1, expectedProperty2 };
+
             var container = _cosmosDbTestEnvironment.GetEntitiesContainer();
 
             await container.CreateItemAsync(unrelatedProperty1);
@@ -40,18 +42,16 @@ namespace RentCRL.Infrastructure.Tests.Integration.Properties
             await container.CreateItemAsync(expectedProperty2);
 
             var result = await _propertyRepository.GetPropertiesByOwnerIdAsync(ownerId);
-
-            result.ShouldContain(p => p.Id == expectedProperty1.Id);
-            result.ShouldContain(p => p.Id == expectedProperty2.Id);
-            result.ShouldAllBe(p => p.OwnerId == ownerId && p.EntityType == nameof(Property));
+           
+            result.ShouldBeEquivalentTo(expectedResult);
         }
 
         [Test, AutoData]
-        public async Task GetPropertiesByOwnerIdAsync_PropertyNotExist_ReturnsNull(Guid ownerId)
+        public async Task GetPropertiesByOwnerIdAsync_PropertyNotExist_ReturnsListEmpty(Guid ownerId)
         {
             var result = await _propertyRepository.GetPropertiesByOwnerIdAsync(ownerId);
 
-            result.ShouldNotBeNull();
+            result.ShouldBeEmpty();
         }
     }
 }

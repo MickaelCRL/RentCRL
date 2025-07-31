@@ -1,6 +1,5 @@
 ﻿using AutoFixture.NUnit3;
 using RentCRL.Domain.Properties;
-using RentCRL.Tests.Utils;
 using Shouldly;
 
 namespace RentCRL.Domain.Tests.Unit.Properties
@@ -20,8 +19,6 @@ namespace RentCRL.Domain.Tests.Unit.Properties
             Guid ownerId
         )
         {
-            // Arrange
-
             // Act
             var property = new Property(id, name, surface, status, address, ownerId);
 
@@ -31,48 +28,90 @@ namespace RentCRL.Domain.Tests.Unit.Properties
             property.Surface.ShouldBe(surface);
             property.Status.ShouldBe(status);
             property.Address.ShouldBe(address);
+            property.OwnerId.ShouldBe(ownerId);
+            property.EntityType.ShouldBe(nameof(Property));
         }
 
-        [Test]
-        public void Constructor_NullOrEmptyName_ThrowArgumentException()
+        [Test, AutoData]
+        public void Constructor_NullOrEmptyName_ThrowArgumentException
+          (
+            Guid id,
+            decimal surface,
+            string status,
+            Address address,
+            Guid ownerId
+        )
         {
+            var name = string.Empty;
+
             // Act 
             var action = () =>
             {
-                var property = PropertyBuilder.Build()
-                                              .WithName(string.Empty)
-                                              .Create();
+                var property = new Property(id, name, surface, status, address, ownerId);
             };
+
             // Assert
             action.ShouldThrow<ArgumentException>();
         }
 
-        [Test]
-        public void Constructor_NegativeOrZeroSurface_ThrowArgumentException()
+        [Test, AutoData]
+        public void Constructor_NegativeOrZeroSurface_ThrowArgumentException
+         (
+            Guid id,
+            string name,
+            string status,
+            Address address,
+            Guid ownerId
+        )
         {
-            // Act 
-            var action = () =>
+           decimal surface = 0;
+
+           // Act 
+           var action = () =>
             {
-                var property = PropertyBuilder.Build()
-                                              .WithSurface(0)
-                                              .Create();
+                var property = new Property(id, name, surface, status, address, ownerId);
             };
+
             // Assert
             action.ShouldThrow<ArgumentException>();
         }
 
-        [Test]
-        public void Constructor_EmptyOwnerId_ThrowArgumentException()
+        [Test, AutoData]
+        public void Constructor_EmptyOwnerId_ThrowArgumentException
+        (
+            Guid id,
+            string name,
+            decimal surface,
+            string status,
+            Address address
+        )
         {
+            Guid ownerId = Guid.Empty;
+
             // Act 
             var action = () =>
             {
-                var property = PropertyBuilder.Build()
-                                              .WithOwnerId(Guid.Empty)
-                                              .Create();
+                var property = new Property(id, name, surface, status, address, ownerId);
             };
+
             // Assert
             action.ShouldThrow<ArgumentException>();
+        }
+
+        [Test, AutoData]
+        public void Constructor_EntityType_ReturnProperty
+        (
+            Guid id,
+            string name,
+            decimal surface,
+            string status,
+            Address address,
+            Guid ownerId
+        )
+        {
+            var property = new Property(id, name, surface, status, address, ownerId);
+
+            property.EntityType.ShouldBe(nameof(Property));
         }
 
         #endregion

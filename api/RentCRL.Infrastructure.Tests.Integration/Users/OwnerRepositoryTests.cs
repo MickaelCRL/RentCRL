@@ -50,7 +50,7 @@ namespace RentCRL.Infrastructure.Tests.Integration.Users
             var unrelatedOwner2 = OwnerBuilder.Build().Create();
             var expectedOwner = UserBuilder.Build()
                 .WithEmail(email)
-                .WithUsertype(nameof(User))
+                .WithUsertype(nameof(Tenant))
                 .Create();
 
             var container = _cosmosDbTestEnvironment.GetEntitiesContainer();
