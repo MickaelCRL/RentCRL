@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using RentCRL.Domain.Users;
 using RentCRL.Infrastructure.Users;
 using RentCRL.Tests.Utils;
 using Shouldly;
@@ -23,21 +24,44 @@ namespace RentCRL.Infrastructure.Tests.Integration.Users
         {
             var email = _fixture.CreateEmail();
 
-            var owner1 = OwnerBuilder.Build().Create();
-            var owner2 = OwnerBuilder.Build().Create();
-            var ownerWithEmail = OwnerBuilder.Build()
+            var unrelatedOwner1 = OwnerBuilder.Build().Create();
+            var unrelatedOwner2 = OwnerBuilder.Build().Create();
+            var expectedOwner = OwnerBuilder.Build()
                 .WithEmail(email)
                 .Create();
 
             var container = _cosmosDbTestEnvironment.GetEntitiesContainer();
 
-            await container.CreateItemAsync(owner1);
-            await container.CreateItemAsync(owner2);
-            await container.CreateItemAsync(ownerWithEmail);
+            await container.CreateItemAsync(unrelatedOwner1);
+            await container.CreateItemAsync(unrelatedOwner2);
+            await container.CreateItemAsync(expectedOwner);
 
-            var owner = await _ownerRepository.GetByEmailAsync(email);
+            var result = await _ownerRepository.GetByEmailAsync(email);
 
-            owner.ShouldBeEquivalentTo(ownerWithEmail);
+            result.ShouldBeEquivalentTo(expectedOwner);
+        }
+
+        [Test]
+        public async Task GetByEmailAsync_EntityTypeIsNotOwner_ReturnsNull()
+        {
+            var email = _fixture.CreateEmail();
+
+            var unrelatedOwner1 = OwnerBuilder.Build().Create();
+            var unrelatedOwner2 = OwnerBuilder.Build().Create();
+            var expectedOwner = UserBuilder.Build()
+                .WithEmail(email)
+                .WithUsertype(nameof(User))
+                .Create();
+
+            var container = _cosmosDbTestEnvironment.GetEntitiesContainer();
+
+            await container.CreateItemAsync(unrelatedOwner1);
+            await container.CreateItemAsync(unrelatedOwner2);
+            await container.CreateItemAsync(expectedOwner);
+
+            var result = await _ownerRepository.GetByEmailAsync(email);
+
+            result.ShouldBeNull();
         }
 
         [Test]
@@ -45,9 +69,9 @@ namespace RentCRL.Infrastructure.Tests.Integration.Users
         {
             var email = _fixture.CreateEmail();
 
-            var owner = await _ownerRepository.GetByEmailAsync(email);
+            var result = await _ownerRepository.GetByEmailAsync(email);
 
-            owner.ShouldBeNull();
+            result.ShouldBeNull();
         }
     }
 }

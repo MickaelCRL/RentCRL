@@ -22,7 +22,7 @@ namespace RentCRL.Tests.Utils
             _lastName = _fixture.Create<string>();
             _email = _fixture.CreateEmail();
             _phoneNumber = _fixture.CreatePhoneNumber();
-            _userType = _fixture.Create<string>();
+            _userType = nameof(Owner);
         }
 
         protected abstract TBuilder GetBuilder();
@@ -66,9 +66,6 @@ namespace RentCRL.Tests.Utils
 
         public TBuilder WithUsertype(string userType) 
         {
-            if (userType != nameof(Tenant) && userType != nameof(Owner))
-                throw new ArgumentException($"UserType must be {nameof(Tenant)} or {nameof(Owner)}");
-
             _userType = userType;
             return GetBuilder();
         }

@@ -32,7 +32,7 @@ namespace RentCRL.Domain.Tests.Unit.Users
             var phoneNumber = _fixture.CreatePhoneNumber();
 
             // Act
-            var user = new User(id, auth0Id, firstName, lastName, email, phoneNumber, nameof(Owner));
+            var user = new User(id, auth0Id, firstName, lastName, email, phoneNumber, nameof(User));
 
             // Assert
             user.ShouldNotBeNull();
@@ -41,7 +41,7 @@ namespace RentCRL.Domain.Tests.Unit.Users
             user.FirstName.ShouldBe(firstName);
             user.LastName.ShouldBe(lastName);
             user.Email.ShouldBe(email);
-            user.EntityType.ShouldBe(nameof(Owner));
+            user.EntityType.ShouldBe(nameof(User));
             user.PhoneNumber.ShouldBe(phoneNumber);
         }
 
@@ -99,7 +99,7 @@ namespace RentCRL.Domain.Tests.Unit.Users
                     lastName,
                     email,
                     phoneNumber,
-                    nameof(Owner)
+                    nameof(User)
                 );
             };
 
@@ -130,7 +130,7 @@ namespace RentCRL.Domain.Tests.Unit.Users
                    lastName,
                    email,
                    phoneNumber,
-                   nameof(Owner)
+                   nameof(User)
                );
             };
 
@@ -161,7 +161,7 @@ namespace RentCRL.Domain.Tests.Unit.Users
                    lastName,
                    email,
                    phoneNumber,
-                   nameof(Owner)
+                   nameof(User)
                );
             };
 
@@ -194,7 +194,7 @@ namespace RentCRL.Domain.Tests.Unit.Users
                    lastName,
                    email,
                    phoneNumber,
-                   nameof(Owner)
+                   nameof(User)
                );
             };
 
@@ -226,7 +226,7 @@ namespace RentCRL.Domain.Tests.Unit.Users
                      lastName,
                      email,
                      phoneNumber,
-                     nameof(Owner)
+                     nameof(User)
                  );
             };
 

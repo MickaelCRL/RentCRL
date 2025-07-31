@@ -26,24 +26,24 @@ namespace RentCRL.Infrastructure.Tests.Integration.Users
             // Arrange
             var email = _fixture.CreateEmail();
 
-            var user1 = UserBuilder.Build().Create();
-            var user2 = UserBuilder.Build().Create();
-            var userWithEmail = UserBuilder.Build()
+            var unrelatedUser1 = UserBuilder.Build().Create();
+            var unrelatedUser2 = UserBuilder.Build().Create();
+            var expectedUser = UserBuilder.Build()
                 .WithEmail(email)
                 .WithUsertype(nameof(Owner))
                 .Create();
 
             var container = _cosmosDbTestEnvironment.GetEntitiesContainer();
 
-            await container.CreateItemAsync(user1);
-            await container.CreateItemAsync(user2);
-            await container.CreateItemAsync(userWithEmail);
+            await container.CreateItemAsync(unrelatedUser1);
+            await container.CreateItemAsync(unrelatedUser2);
+            await container.CreateItemAsync(expectedUser);
 
             // Act
-            var user = await _userRepository.GetByEmailAsync(email);
+            var result = await _userRepository.GetByEmailAsync(email);
 
             // Assert
-            user.ShouldBeEquivalentTo(userWithEmail);
+            result.ShouldBeEquivalentTo(expectedUser);
         }
 
         [Test]
@@ -52,24 +52,24 @@ namespace RentCRL.Infrastructure.Tests.Integration.Users
             // Arrange
             var email = _fixture.CreateEmail();
 
-            var user1 = UserBuilder.Build().Create();
-            var user2 = UserBuilder.Build().Create();
-            var userWithEmail = UserBuilder.Build()
+            var unrelatedUser1 = UserBuilder.Build().Create();
+            var unrelatedUser2 = UserBuilder.Build().Create();
+            var expectedUser = UserBuilder.Build()
                 .WithEmail(email)
                 .WithUsertype(nameof(Tenant))
                 .Create();
 
             var container = _cosmosDbTestEnvironment.GetEntitiesContainer();
 
-            await container.CreateItemAsync(user1);
-            await container.CreateItemAsync(user2);
-            await container.CreateItemAsync(userWithEmail);
+            await container.CreateItemAsync(unrelatedUser1);
+            await container.CreateItemAsync(unrelatedUser2);
+            await container.CreateItemAsync(expectedUser);
 
             // Act
-            var user = await _userRepository.GetByEmailAsync(email);
+            var result = await _userRepository.GetByEmailAsync(email);
 
             // Assert
-            user.ShouldBeEquivalentTo(userWithEmail);
+            result.ShouldBeEquivalentTo(expectedUser);
         }
 
         [Test]
@@ -77,9 +77,9 @@ namespace RentCRL.Infrastructure.Tests.Integration.Users
         {
             var email = _fixture.CreateEmail();
 
-            var user = await _userRepository.GetByEmailAsync(email);
+            var result = await _userRepository.GetByEmailAsync(email);
 
-            user.ShouldBeNull();           
+            result.ShouldBeNull();           
         }
     }
 }
