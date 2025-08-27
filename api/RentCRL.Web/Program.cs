@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using RentCRL.Presentation.Properties;
 using RentCRL.Presentation.Users;
 using RentCRL.Web;
 using RentCRL.Web.DependencyInjection;
+using Scalar.AspNetCore;
 using Serilog;
 using System.Security.Claims;
 
@@ -21,7 +23,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:5173")
+                          policy.WithOrigins(builder.Configuration["AppBaseUrl"])
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials();
@@ -45,7 +47,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(options =>
     {
         options.AddPolicy("read:messages", policy => policy.Requirements.Add(new
-        HasScopeRequirement("read:messages", domain!)));
+        HasScopeRequirement("read:messages", domain)));
     }
     );
 
@@ -57,22 +59,40 @@ builder.Services.AddOpenApi();
 
 builder.RegisterInfrastructureServices();
 builder.RegisterApplicationServices();
+builder.RegisterPresentationServices();
 
 var app = builder.Build();
+
+var cosmosDbService = app.Services.GetService<CosmosDbCreator>();
+cosmosDbService.EnsureDatabaseAndContainerExistAsync()
+    .GetAwaiter()
+    .GetResult();
+
+app.MapGet("/", () => Results.Ok("OK"));
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
-app.UseHttpsRedirection();
+if (app.Environment.IsStaging())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
+//app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapUserEndpoint();
 app.MapOwnerEndpoint();
+app.MapPropertyEndpoint();
 
 app.Run();

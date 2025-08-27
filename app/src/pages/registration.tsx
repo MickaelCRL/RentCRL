@@ -14,51 +14,51 @@ import {
 import Header from "../components/Header";
 import Owner from "../model/Owner";
 import Regexes from "../model/Regexes";
+import { useUserContext } from "../contexts/UserContext";
+import { createOwnerAsync } from "../services/users/ownerServices";
 
 const Registration = () => {
-  const { user, getAccessTokenSilently } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [phone, setPhone] = useState("");
-  const [phoneError, setPhoneError] = useState("");
-  const [owner, setOwner] = useState<Owner>();
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumberError, setPhoneNumberError] = useState("");
+  const { userContext, setUserContext } = useUserContext();
 
   useEffect(() => {
-    if (user) {
-      setOwner({
-        auth0Id: user.sub,
-        lastname: user.family_name,
-        firstname: user.given_name,
-        email: user.email,
-        phoneNumber: "",
-      });
+    if (!isAuthenticated) {
+      navigate("/");
     }
-  }, [user]);
+
+    if (isAuthenticated && !userContext?.entityType) {
+      navigate("/select-role");
+    }
+  }, [user, isAuthenticated, navigate]);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhone(e.target.value);
-
-    if (!phone.match(Regexes.phoneNumber)) {
-      setPhoneError("Numéro de téléphone invalide");
+    setPhoneNumber(e.target.value);
+    if (!phoneNumber.match(Regexes.phoneNumber)) {
+      setPhoneNumberError("Numéro de téléphone invalide");
     } else {
-      setPhoneError("");
-      setOwner({ ...owner, phoneNumber: e.target.value });
+      setPhoneNumberError("");
+      setPhoneNumber(e.target.value);
     }
   };
 
   const handleSubmit = async () => {
-    const token = await getAccessTokenSilently();
+    const owner: Owner = {
+      auth0Id: user?.sub,
+      lastname: user?.family_name,
+      firstname: user?.given_name,
+      email: user?.email,
+      phoneNumber,
+      entityType: "Owner",
+    };
 
     setLoading(true);
-    await fetch(`${import.meta.env.VITE_API_BASE_URL}/owners`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ ...owner }),
-    });
 
+    const response = await createOwnerAsync(owner);
+    setUserContext(response);
     setLoading(false);
     navigate("/dashboard");
   };
@@ -112,11 +112,11 @@ const Registration = () => {
                   variant="outlined"
                   label="Téléphone"
                   name="phone"
-                  defaultValue={owner?.phoneNumber}
+                  defaultValue={phoneNumber}
                   onChange={handlePhoneChange}
                   required
-                  error={phoneError ? true : false}
-                  helperText={phoneError}
+                  error={phoneNumberError ? true : false}
+                  helperText={phoneNumberError}
                 />
               </Box>
 
@@ -127,8 +127,8 @@ const Registration = () => {
                   onClick={handleSubmit}
                   disabled={
                     loading ||
-                    owner?.phoneNumber === "" ||
-                    phoneError?.length > 0
+                    phoneNumber === "" ||
+                    phoneNumberError?.length > 0
                   }
                 >
                   {loading ? (

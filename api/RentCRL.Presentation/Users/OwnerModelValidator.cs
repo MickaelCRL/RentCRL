@@ -7,6 +7,7 @@ namespace RentCRL.Presentation.Users
     {
         public OwnerModelValidator()
         {
+            RuleFor(o => o.Auth0Id).NotEmpty();
             RuleFor(o => o.FirstName).NotEmpty();
             RuleFor(o => o.LastName).NotEmpty();
             RuleFor(o => o.Email).NotEmpty().Matches(Regexes.Email);

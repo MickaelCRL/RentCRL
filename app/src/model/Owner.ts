@@ -1,9 +1,7 @@
-interface Owner {
-  auth0Id?: string;
-  lastname?: string;
-  firstname?: string;
-  email?: string;
-  phoneNumber?: string;
+import User from "./User";
+
+interface Owner extends User {
+  entityType?: "Owner";
 }
 
 export default Owner;

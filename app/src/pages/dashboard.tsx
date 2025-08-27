@@ -1,36 +1,16 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { Container, Typography } from "@mui/material";
-import Header from "../components/Header";
+import OwnerDashboard from "../components/dashboard/OwnerDashboard";
+import TenantDashboard from "../components/dashboard/TenantDashboard";
+import { useUserContext } from "../contexts/UserContext";
 
 function Dashboard() {
-  const { isAuthenticated, user } = useAuth0();
-
+  const { userContext } = useUserContext();
   return (
     <>
-      {isAuthenticated && user && (
-        <>
-          <Header />
-          <Container
-            sx={{
-              width: "100%",
-              marginTop: 20,
-              alignItems: "center",
-              textAlign: "center",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
-          >
-            <Typography variant="h4" gutterBottom sx={{ width: "100%" }}>
-              Bonjour, {user.name}!
-            </Typography>
-            <Typography variant="body1" sx={{ width: "100%" }}>
-              Bienvenue dans votre tableau de bord. Vous pouvez commencer à
-              gérer vos quittances et vos données.
-            </Typography>
-          </Container>
-        </>
-      )}
+      {userContext?.entityType === "Owner" ? (
+        <OwnerDashboard />
+      ) : userContext?.entityType === "Tenant" ? (
+        <TenantDashboard />
+      ) : null}
     </>
   );
 }

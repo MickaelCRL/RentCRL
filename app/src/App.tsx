@@ -2,19 +2,36 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Box, Container, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import LogoutButton from "./components/auth/LoginButton";
+import LoginButton from "./components/auth/LoginButton";
 import logo from "./static/img/logo.svg";
+import SpinnerLoading from "./components/ui/SpinnerLoading";
+import { useUserContext } from "./contexts/UserContext";
+import { getUserByEmailAsync } from "./services/users/userServices";
 
 function App() {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, isLoading, user } = useAuth0();
+  const { setUserContext } = useUserContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/registration");
-    }
-  }, [isAuthenticated, navigate]);
+    const checkUser = async () => {
+      if (!isLoading && isAuthenticated) {
+        const email = user?.email || "";
+        const response = await getUserByEmailAsync(email);
+        if (response) {
+          setUserContext(response);
+          navigate("/dashboard");
+        } else {
+          navigate("/select-role");
+        }
+      }
+    };
+    checkUser();
+  }, [isAuthenticated, isLoading, navigate]);
 
+  if (isLoading || isAuthenticated) {
+    return <SpinnerLoading />;
+  }
   return (
     <>
       <Container
@@ -41,7 +58,7 @@ function App() {
           Connectez-vous pour accéder à votre tableau de bord et gérer vos
           quittances.
         </Typography>
-        <LogoutButton />
+        <LoginButton />
       </Container>
     </>
   );

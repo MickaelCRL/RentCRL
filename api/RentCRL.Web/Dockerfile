@@ -1,30 +1,24 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
+# Base image for running the application
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 80
 
-
-# This stage is used to build the service project
+# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["RentCRL.Web/RentCRL.Web.csproj", "RentCRL.Web/"]
-RUN dotnet restore "./RentCRL.Web/RentCRL.Web.csproj"
+
 COPY . .
 WORKDIR "/src/RentCRL.Web"
-RUN dotnet build "./RentCRL.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet restore "RentCRL.Web.csproj"
+RUN dotnet build "RentCRL.Web.csproj" -c Release -o /app/build
 
-# This stage is used to publish the service project to be copied to the final stage
+# Publish stage
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./RentCRL.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "RentCRL.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+# Final stage for running the application
 FROM base AS final
+ENV ASPNETCORE_HTTP_PORTS=80
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "RentCRL.Web.dll"]
