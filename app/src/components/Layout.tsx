@@ -10,27 +10,32 @@ const Layout = () => {
   const navigate = useNavigate();
 
   const fetchAndSetUser = useCallback(async () => {
-    const email = user?.email || "";
+    const email = user?.email;
     const fetchedUser = await getUserByEmailAsync(email);
+    setUserContext(fetchedUser);
+  }, [user?.email]);
 
-    if (!fetchedUser) {
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (!isAuthenticated) {
+      navigate("/");
       return;
     }
 
-    setUserContext(fetchedUser);
-  }, [user?.email, navigate, setUserContext]);
-
-  useEffect(() => {
-    if (!isLoading) {
-      if (!isAuthenticated) {
-        navigate("/");
-      } else if (!userContext) {
-        fetchAndSetUser();
-      }
+    if (isAuthenticated && !userContext) {
+      fetchAndSetUser();
     }
-  }, [isAuthenticated, userContext, fetchAndSetUser, navigate]);
+  }, [isAuthenticated, isLoading, fetchAndSetUser]);
 
-  return <>{userContext && <Outlet />} </>;
+  return (
+    <>
+      <div>
+        {isAuthenticated} {userContext?.email} toto
+      </div>
+      {userContext && <Outlet />}{" "}
+    </>
+  );
 };
 
 export default Layout;

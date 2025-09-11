@@ -2,6 +2,7 @@
 using Microsoft.Azure.Cosmos.Linq;
 using RentCRL.Domain.Base;
 using RentCRL.Infrastructure.Database;
+using System.Net;
 
 namespace RentCRL.Infrastructure.Base
 {
@@ -25,6 +26,20 @@ namespace RentCRL.Infrastructure.Base
         {
             var response = await GetContainer().CreateItemAsync(entity);
             return response.Resource;
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            string stringId = id.ToString();
+            try
+            {
+                var response = await GetContainer().DeleteItemAsync<TEntity>(stringId, new PartitionKey(stringId));
+            }
+            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                // Add logger to domain
+                // Add log
+            }
         }
 
         public async Task<TEntity> GetByIdAsync(Guid id)

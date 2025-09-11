@@ -26,7 +26,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
           backgroundColor: "#EEEEEE",
           color: "#000",
           p: 2,
-          marginTop: "60px",
+          marginTop: "40px",
         }}
       >
         <List

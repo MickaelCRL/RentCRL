@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Routing;
 using RentCRL.Application.Properties;
 using RentCRL.Application.Users;
 using RentCRL.Domain.Properties;
+using RentCRL.Domain.Users;
 using RentCRL.Presentation.Addresses;
 using RentCRL.Presentation.Users;
 using System.Security.Claims;
@@ -15,19 +16,58 @@ namespace RentCRL.Presentation.Properties
     public static class PropertyEndpoint
     {
         public const string PropertyRoute = "/owners/{ownerId:guid}/properties";
+        public const string DeletePropertyRoute = "/owners/{ownerId:guid}/properties/{propertyId:guid}";
+
         public static void MapPropertyEndpoint(this IEndpointRouteBuilder app)
         {
             app.MapPost(PropertyRoute, CreateProperty)
-            .RequireAuthorization()
-            .WithName("CreateProperty");
+                .RequireAuthorization()
+                .WithName("CreateProperty");
 
             app.MapGet(PropertyRoute, GetProperties)
-            .RequireAuthorization()
-            .WithName("GetProperties");
+                .RequireAuthorization()
+                .WithName("GetProperties");
+
+            app.MapDelete(DeletePropertyRoute, DeleteProperty)
+                .RequireAuthorization()
+                .WithName("DeleteProperty");
         }
 
-        internal static async Task<IResult> GetProperties(Guid ownerId, IPropertyService propertyService)
+        internal static async Task<IResult> DeleteProperty(
+            Guid ownerId,
+            Guid propertyId,
+            IOwnerService ownerService,
+            IPropertyService propertyService,
+            ClaimsPrincipal user
+        )
         {
+            (bool flowControl, IResult value) = AuthorizedUser(ownerId, ownerService, user);
+            if (!flowControl)
+            {
+                return value;
+            }
+
+            var result = await propertyService.DeletePropertyByIdAsync(propertyId);
+
+            if (result.IsSuccess)
+                return Results.NoContent();
+
+            return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);
+        }
+
+        internal static async Task<IResult> GetProperties(
+            Guid ownerId,
+            IOwnerService ownerService,
+            IPropertyService propertyService,
+            ClaimsPrincipal user
+        )
+        {
+            (bool flowControl, IResult value) = AuthorizedUser(ownerId, ownerService, user);
+            if (!flowControl)
+            {
+                return value;
+            }
+
             var result = await propertyService.GetPropertiesByOwnerIdAsync(ownerId);
 
             if (result.IsSuccess)
@@ -55,12 +95,11 @@ namespace RentCRL.Presentation.Properties
             if (!validationResult.IsValid)
                 return Results.ValidationProblem(validationResult.ToDictionary());
 
-            Console.WriteLine("owner id : " + ownerId);
-            var ownerResult = ownerService.GetOwnerByIdAsync(ownerId);
-            var email = user.GetEmail();
-
-            if (ownerResult.Result.Value.Email != email)
-                return Results.Unauthorized();
+            (bool flowControl, IResult value) = AuthorizedUser(ownerId, ownerService, user);
+            if (!flowControl)
+            {
+                return value;
+            }
 
             var result = await propertyService.CreatePropertyAsync(
                 propertyModel.Name,
@@ -77,6 +116,16 @@ namespace RentCRL.Presentation.Properties
             }
 
             return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);
+        }
+
+        private static (bool flowControl, IResult value) AuthorizedUser(Guid ownerId, IOwnerService ownerService, ClaimsPrincipal user)
+        {
+            var ownerResult = ownerService.GetOwnerByIdAsync(ownerId);
+            var email = user.GetEmail();
+
+            if (ownerResult.Result.Value.Email != email)
+                return (flowControl: false, value: Results.Unauthorized());
+            return (flowControl: true, value: null);
         }
     }
 }

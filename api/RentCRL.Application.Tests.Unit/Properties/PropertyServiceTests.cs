@@ -25,6 +25,38 @@ namespace RentCRL.Application.Tests.Unit.Properties
         }
 
         [Test, AutoData]
+        public async Task DeletePropertyByIdAsync_PropertyExist_DeleteProperty(Guid id)
+        {
+            var property = PropertyBuilder.Build()
+                .WithId(id)
+                .Create();
+
+            _propertyRepositoryMock
+               .Setup(r => r.GetByIdAsync(id))
+               .ReturnsAsync(property);
+
+            var response = await _propertyService.DeletePropertyByIdAsync(id);
+
+            _propertyRepositoryMock.Verify(r => r.DeleteAsync(id), Times.Once);
+            property.Id.ShouldBe(id);
+            response.IsSuccess.ShouldBeTrue();
+        }
+        
+
+        [Test, AutoData]
+        public async Task DeletePropertyByIdAsync_PropertyNotExist_ReturnSuccess(Guid id)
+        {
+            _propertyRepositoryMock
+               .Setup(r => r.GetByIdAsync(id))
+               .ReturnsAsync((Property) null);
+
+            var response = await _propertyService.DeletePropertyByIdAsync(id);
+
+            _propertyRepositoryMock.Verify(r => r.DeleteAsync(id), Times.Never);
+            response.IsSuccess.ShouldBeTrue();
+        }
+
+        [Test, AutoData]
         public async Task CreatePropertyAsync_PropertyNotExist_CreateProperty(Guid id, string name, decimal surface, string status, Address address, Guid ownerId)
         {
             // Arrange

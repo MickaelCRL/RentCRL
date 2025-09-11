@@ -1,8 +1,9 @@
 import { Box, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Header from "../components/Header";
 import DashboardLayout from "../components/dashboard/DashboardLayout";
 import AddPropertyButton from "../components/properties/AddPropertyButton";
+import PropertyActions from "../components/properties/PropertyActions";
 import BreadcrumbsNav from "../components/ui/Breadcrumbs";
 import { useUserContext } from "../contexts/UserContext";
 import BreadcrumbItem from "../model/BreadcrumbItem";
@@ -11,7 +12,6 @@ import { getPropertiesByOwnerIdAsync } from "../services/properties/propertyServ
 
 function Properties() {
   const { userContext } = useUserContext();
-  const ownerId = userContext?.id || "";
   const [properties, setProperties] = useState<Property[]>([]);
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -19,15 +19,15 @@ function Properties() {
     { label: "Mes propriétés" },
   ];
 
+  const fetchProperties = useCallback(async () => {
+    const ownerId = userContext?.id;
+    const res = await getPropertiesByOwnerIdAsync(ownerId);
+    setProperties(res);
+  }, []);
+
   useEffect(() => {
-    const fetchProperties = async () => {
-      const res = await getPropertiesByOwnerIdAsync(ownerId);
-      setProperties(res);
-    };
-    if (ownerId) {
-      fetchProperties();
-    }
-  }, [ownerId]);
+    fetchProperties();
+  }, [properties]);
 
   return (
     <>
@@ -58,15 +58,22 @@ function Properties() {
                 p: 2,
                 borderRadius: 2,
                 boxShadow: 1,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
               }}
             >
-              <Typography variant="h6">{property.name}</Typography>
-              <Typography>
-                Adresse : {property.address?.line1}, {property.address?.city},{" "}
-                {property.address?.postalCode}, {property.address?.country}
-              </Typography>
-              <Typography>Surface : {property.surface} m²</Typography>
-              <Typography>Statut : {property.status}</Typography>
+              <Box>
+                <Typography variant="h6">{property.name}</Typography>
+                <Typography>
+                  Adresse : {property.address?.line1}, {property.address?.city},{" "}
+                  {property.address?.postalCode}, {property.address?.country}
+                </Typography>
+                <Typography>Surface : {property.surface} m²</Typography>
+                <Typography>Statut : {property.status}</Typography>
+              </Box>
+
+              <PropertyActions propertyId={property.id} />
             </Box>
           ))}
         </Box>

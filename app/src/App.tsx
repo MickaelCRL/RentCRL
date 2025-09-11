@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     const checkUser = async () => {
       if (!isLoading && isAuthenticated) {
-        const email = user?.email || "";
+        const email = user?.email;
         const response = await getUserByEmailAsync(email);
         if (response) {
           setUserContext(response);

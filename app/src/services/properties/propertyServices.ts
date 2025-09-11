@@ -6,7 +6,17 @@ export async function createPropertyAsync(ownerId: string, property: Property) {
   return response.data;
 }
 
-export async function getPropertiesByOwnerIdAsync(ownerId: string) {
+export async function getPropertiesByOwnerIdAsync(ownerId?: string) {
   const response = await api.get(`/owners/${ownerId}/properties`);
+  return response.data;
+}
+
+export async function deletePropertyByIdAsync(
+  ownerId?: string,
+  propertyId?: string
+) {
+  const response = await api.delete(
+    `/owners/${ownerId}/properties/${propertyId}`
+  );
   return response.data;
 }

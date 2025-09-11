@@ -33,6 +33,12 @@ namespace RentCRL.Tests.Utils
             return new Property(_id, _name, _surface, _status, _address, _ownerId);
         }
 
+        public PropertyBuilder WithId(Guid id)
+        {
+            _id = id;
+            return this;
+        }
+
         public PropertyBuilder WithName(string name)
         {
             _name = name;
