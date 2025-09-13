@@ -19,17 +19,15 @@ import { useUserContext } from "../contexts/UserContext";
 function SelectRolePage() {
   const [role, setRole] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();
   const { isAuthenticated, isLoading } = useAuth0();
   const { setUserContext } = useUserContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       navigate("/");
     }
   }, [isAuthenticated, isLoading, navigate]);
-
-  if (isLoading) return <SpinnerLoading />;
 
   const handleSelect = async () => {
     if (!role) return;
@@ -45,6 +43,8 @@ function SelectRolePage() {
       navigate("/registration");
     }
   };
+
+  if (isLoading) return <SpinnerLoading />;
 
   return (
     <>

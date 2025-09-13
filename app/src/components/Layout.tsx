@@ -1,41 +1,30 @@
-import { useCallback, useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/UserContext";
-import { useAuth0 } from "@auth0/auth0-react";
-import { getUserByEmailAsync } from "../services/users/userServices";
+import useUser from "../services/users/useUser";
 
 const Layout = () => {
   const { user, isLoading, isAuthenticated } = useAuth0();
   const { userContext, setUserContext } = useUserContext();
   const navigate = useNavigate();
-
-  const fetchAndSetUser = useCallback(async () => {
-    const email = user?.email;
-    const fetchedUser = await getUserByEmailAsync(email);
-    setUserContext(fetchedUser);
-  }, [user?.email]);
+  const email = user?.email || "";
+  const { user: userSwr, isLoading: isLoadingSwr } = useUser(email);
 
   useEffect(() => {
-    if (isLoading) return;
+    if (isLoading || isLoadingSwr) return;
 
     if (!isAuthenticated) {
       navigate("/");
       return;
     }
 
-    if (isAuthenticated && !userContext) {
-      fetchAndSetUser();
+    if (isAuthenticated && !userContext && userSwr) {
+      setUserContext(userSwr);
     }
-  }, [isAuthenticated, isLoading, fetchAndSetUser]);
+  }, [isAuthenticated, isLoading, isLoadingSwr]);
 
-  return (
-    <>
-      <div>
-        {isAuthenticated} {userContext?.email} toto
-      </div>
-      {userContext && <Outlet />}{" "}
-    </>
-  );
+  return <>{userContext && <Outlet />} </>;
 };
 
 export default Layout;

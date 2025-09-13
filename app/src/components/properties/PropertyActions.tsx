@@ -9,16 +9,20 @@ import { useUserContext } from "../../contexts/UserContext";
 
 interface PropertyActionsProps {
   propertyId?: string;
+  onDeleted: () => void;
 }
 
-export default function PropertyActions({ propertyId }: PropertyActionsProps) {
+export default function PropertyActions({
+  propertyId,
+  onDeleted,
+}: PropertyActionsProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const { userContext } = useUserContext();
 
   const handleDelete = async () => {
     const ownerId = userContext?.id;
     await deletePropertyByIdAsync(ownerId, propertyId);
-    window.location.reload();
+    onDeleted();
   };
 
   return (

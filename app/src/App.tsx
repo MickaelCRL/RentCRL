@@ -3,33 +3,30 @@ import { Box, Container, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginButton from "./components/auth/LoginButton";
-import logo from "./static/img/logo.svg";
 import SpinnerLoading from "./components/ui/SpinnerLoading";
 import { useUserContext } from "./contexts/UserContext";
-import { getUserByEmailAsync } from "./services/users/userServices";
+import useUser from "./services/users/useUser";
+import logo from "./static/img/logo.svg";
 
 function App() {
   const { isAuthenticated, isLoading, user } = useAuth0();
   const { setUserContext } = useUserContext();
+  const email = user?.email || "";
+  const { user: userSwr, isLoading: isLoadingSwr } = useUser(email);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkUser = async () => {
-      if (!isLoading && isAuthenticated) {
-        const email = user?.email;
-        const response = await getUserByEmailAsync(email);
-        if (response) {
-          setUserContext(response);
-          navigate("/dashboard");
-        } else {
-          navigate("/select-role");
-        }
+    if (!isLoading && isAuthenticated && email) {
+      if (!isLoadingSwr && userSwr) {
+        setUserContext(userSwr);
+        navigate("/dashboard");
+      } else if (!isLoadingSwr && !userSwr) {
+        navigate("/select-role");
       }
-    };
-    checkUser();
-  }, [isAuthenticated, isLoading, navigate]);
+    }
+  }, [isAuthenticated, isLoading, isLoadingSwr, userSwr, email]);
 
-  if (isLoading || isAuthenticated) {
+  if (isLoading || (isAuthenticated && (!email || isLoadingSwr))) {
     return <SpinnerLoading />;
   }
   return (
