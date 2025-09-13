@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace RentCRL.Domain.Base
+﻿namespace RentCRL.Domain.Base
 {
     public interface IEntityRepository<TEntity> where TEntity : Entity
     {

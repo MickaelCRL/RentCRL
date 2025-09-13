@@ -1,7 +1,6 @@
 ﻿using RentCRL.Domain;
 using RentCRL.Domain.Properties;
 using RentCRL.Domain.Results;
-using System.Net;
 
 namespace RentCRL.Application.Properties
 {

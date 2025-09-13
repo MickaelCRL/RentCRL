@@ -27,7 +27,7 @@ namespace RentCRL.Application.Properties
         {
             var property = await _propertyRepository.GetByIdAsync(propertyId);
 
-            if(property != null)
+            if (property != null)
                 await _propertyRepository.DeleteAsync(propertyId);
 
             return Result.Success();
