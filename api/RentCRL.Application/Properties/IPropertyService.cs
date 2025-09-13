@@ -10,5 +10,4 @@ namespace RentCRL.Application.Properties
         Task<Result> DeletePropertyByIdAsync(Guid propertyId);
         Task<Result<List<Property>>> GetPropertiesByOwnerIdAsync(Guid ownerId);
     }
-
 }
