@@ -3,13 +3,14 @@ using Microsoft.Azure.Cosmos.Linq;
 using RentCRL.Domain.Properties;
 using RentCRL.Infrastructure.Base;
 using RentCRL.Infrastructure.Database;
+using Serilog;
 
 namespace RentCRL.Infrastructure.Properties
 {
     public class PropertyRepository : EntityRepository<Property>, IPropertyRepository
     {
-        public PropertyRepository(CosmosDbSettings cosmosDbSettings, CosmosClient cosmosClient) 
-            : base(cosmosDbSettings, cosmosClient)
+        public PropertyRepository(CosmosDbSettings cosmosDbSettings, CosmosClient cosmosClient, ILogger logger) 
+            : base(cosmosDbSettings, cosmosClient, logger)
         { }
 
         public async Task<List<Property>> GetPropertiesByOwnerIdAsync(Guid ownerId)

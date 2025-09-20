@@ -3,13 +3,14 @@ using Microsoft.Azure.Cosmos.Linq;
 using RentCRL.Domain.Users;
 using RentCRL.Infrastructure.Base;
 using RentCRL.Infrastructure.Database;
+using Serilog;
 
 namespace RentCRL.Infrastructure.Users
 {
     public class UserRepository : EntityRepository<Domain.Users.User>, IUserRepository
     {
-        public UserRepository(CosmosDbSettings cosmosDbSettings, CosmosClient cosmosClient)
-            : base(cosmosDbSettings, cosmosClient)
+        public UserRepository(CosmosDbSettings cosmosDbSettings, CosmosClient cosmosClient, ILogger logger)
+            : base(cosmosDbSettings, cosmosClient, logger)
         { }
 
         public async Task<Domain.Users.User> GetByEmailAsync(string email)
