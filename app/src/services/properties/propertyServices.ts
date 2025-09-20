@@ -12,8 +12,8 @@ export async function getPropertiesByOwnerIdAsync(ownerId?: string) {
 }
 
 export async function deletePropertyByIdAsync(
-  ownerId?: string,
-  propertyId?: string
+  ownerId: string,
+  propertyId: string
 ) {
   const response = await api.delete(
     `/owners/${ownerId}/properties/${propertyId}`

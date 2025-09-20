@@ -28,7 +28,7 @@ namespace RentCRL.Application.Properties
             var property = await _propertyRepository.GetByIdAsync(propertyId);
 
             if (property != null)
-                await _propertyRepository.DeleteAsync(propertyId);
+                await _propertyRepository.DeleteAsync(property.Id);
 
             return Result.Success();
         }
@@ -36,7 +36,7 @@ namespace RentCRL.Application.Properties
         public async Task<Result<List<Property>>> GetPropertiesByOwnerIdAsync(Guid ownerId)
         {
             var response = await _propertyRepository.GetPropertiesByOwnerIdAsync(ownerId);
-            if (response.Count == 0)
+            if (response == null || response.Count == 0)
                 return PropertyErrors.CouldNotFoundPropertiesByOwnerId;
 
             return response;
