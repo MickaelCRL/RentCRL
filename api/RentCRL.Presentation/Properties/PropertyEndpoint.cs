@@ -41,20 +41,6 @@ namespace RentCRL.Presentation.Properties
             ClaimsPrincipal user
         )
         {
-            (bool flowControl, IResult value) = AuthorizedUser(ownerId, ownerService, user);
-            if (!flowControl)
-            {
-                return value;
-            }
-
-        internal static async Task<IResult> DeleteProperty(
-            Guid ownerId,
-            Guid propertyId,
-            IOwnerService ownerService,
-            IPropertyService propertyService,
-            ClaimsPrincipal user
-        )
-        {
             var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
             if (!IsOwnerEmailValid)
                 return Results.Unauthorized();
