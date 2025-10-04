@@ -28,7 +28,7 @@ namespace RentCRL.Presentation.Properties
                 .RequireAuthorization()
                 .WithName("GetProperties");
 
-            app.MapDelete(DeletePropertyRoute, DeleteProperty)
+            app.MapDelete(PropertyRoute, DeleteProperty)
                 .RequireAuthorization()
                 .WithName("DeleteProperty");
 
@@ -52,7 +52,6 @@ namespace RentCRL.Presentation.Properties
             var result = await propertyService.UpdatePropertyByIdAsync(propertyId);
 
             if (result.IsSuccess)
-            {
                 var property = result.Value;
                 return Results.Ok(property);
             }
@@ -104,11 +103,9 @@ namespace RentCRL.Presentation.Properties
             ClaimsPrincipal user
         )
         {
-            (bool flowControl, IResult value) = AuthorizedUser(ownerId, ownerService, user);
-            if (!flowControl)
-            {
-                return value;
-            }
+            var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
+            if (!IsOwnerEmailValid)
+                return Results.Unauthorized();
 
             var result = await propertyService.GetPropertiesByOwnerIdAsync(ownerId);
 
@@ -121,6 +118,7 @@ namespace RentCRL.Presentation.Properties
 
             if (result.Error == PropertyErrors.CouldNotFoundPropertiesByOwnerId)
                 return Results.NotFound();
+
             return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);
         }
 
@@ -137,11 +135,9 @@ namespace RentCRL.Presentation.Properties
             if (!validationResult.IsValid)
                 return Results.ValidationProblem(validationResult.ToDictionary());
 
-            (bool flowControl, IResult value) = AuthorizedUser(ownerId, ownerService, user);
-            if (!flowControl)
-            {
-                return value;
-            }
+            var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
+            if (!IsOwnerEmailValid)
+                return Results.Unauthorized();
 
             var result = await propertyService.CreatePropertyAsync(
                 propertyModel.Name,
@@ -160,14 +156,16 @@ namespace RentCRL.Presentation.Properties
             return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);
         }
 
-        private static (bool flowControl, IResult value) AuthorizedUser(Guid ownerId, IOwnerService ownerService, ClaimsPrincipal user)
+        private async static Task<bool> IsOwnerEmailMatchingClaimsPrincipal(Guid ownerId, IOwnerService ownerService, ClaimsPrincipal user)
         {
-            var ownerResult = ownerService.GetOwnerByIdAsync(ownerId);
-            var email = user.GetEmail();
+            var result = await ownerService.GetOwnerByIdAsync(ownerId);
+            var emailFromOwner = result.Value.Email; 
+            var emailFromClaimsPrincipal = user.GetEmail();
 
-            if (ownerResult.Result.Value.Email != email)
-                return (flowControl: false, value: Results.Unauthorized());
-            return (flowControl: true, value: null);
+            if (emailFromOwner != emailFromClaimsPrincipal)
+                return false;
+
+            return true;
         }
     }
 }

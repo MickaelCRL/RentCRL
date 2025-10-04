@@ -6,13 +6,13 @@ import PropertyActions from "../components/properties/PropertyActions";
 import BreadcrumbsNav from "../components/ui/Breadcrumbs";
 import { useUserContext } from "../contexts/UserContext";
 import BreadcrumbItem from "../model/BreadcrumbItem";
-import useProperty from "../services/properties/useProperty";
+import useProperties from "../services/properties/useProperties";
 import SpinnerLoading from "../components/ui/SpinnerLoading";
 import Error from "../components/ui/Error";
 
 function Properties() {
   const { userContext } = useUserContext();
-  const { properties, isLoading, isError, mutate } = useProperty(
+  const { properties, isLoading, isError, mutate } = useProperties(
     userContext?.id
   );
 
@@ -70,7 +70,10 @@ function Properties() {
                   <Typography>Surface : {property.surface} m²</Typography>
                   <Typography>Statut : {property.status}</Typography>
                 </Box>
-                <PropertyActions propertyId={property.id} onDeleted={mutate} />
+                <PropertyActions
+                  propertyId={property.id || ""}
+                  onDeleted={mutate}
+                />
               </Box>
             ))
           )}

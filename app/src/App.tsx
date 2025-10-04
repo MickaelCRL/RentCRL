@@ -15,18 +15,34 @@ function App() {
   const { user: userSwr, isLoading: isLoadingSwr } = useUser(email);
   const navigate = useNavigate();
 
+  const isAuth0UserReady = () => {
+    return !isLoading && isAuthenticated && email;
+  };
+
+  const isUserReadyToBeInContext = () => {
+    return !isLoadingSwr && userSwr;
+  };
+
+  const isUserMissingRole = () => {
+    return !isLoadingSwr && !userSwr;
+  };
+
+  const isLoadingUI = () => {
+    return isLoading || (isAuthenticated && (!email || isLoadingSwr));
+  };
+
   useEffect(() => {
-    if (!isLoading && isAuthenticated && email) {
-      if (!isLoadingSwr && userSwr) {
-        setUserContext(userSwr);
+    if (isAuth0UserReady()) {
+      if (isUserReadyToBeInContext()) {
+        setUserContext(userSwr!);
         navigate("/dashboard");
-      } else if (!isLoadingSwr && !userSwr) {
+      } else if (isUserMissingRole()) {
         navigate("/select-role");
       }
     }
   }, [isAuthenticated, isLoading, isLoadingSwr, userSwr, email]);
 
-  if (isLoading || (isAuthenticated && (!email || isLoadingSwr))) {
+  if (isLoadingUI()) {
     return <SpinnerLoading />;
   }
   return (
