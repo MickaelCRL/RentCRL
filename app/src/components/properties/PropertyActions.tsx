@@ -20,7 +20,7 @@ export default function PropertyActions({
   const { userContext } = useUserContext();
 
   const handleDelete = async () => {
-    const ownerId = userContext?.id;
+    const ownerId = userContext?.id || "";
     await deletePropertyByIdAsync(ownerId, propertyId);
     onDeleted();
   };

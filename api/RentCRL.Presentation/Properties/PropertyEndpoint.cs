@@ -28,7 +28,7 @@ namespace RentCRL.Presentation.Properties
                 .RequireAuthorization()
                 .WithName("GetProperties");
 
-            app.MapDelete(DeletePropertyRoute, DeleteProperty)
+            app.MapDelete(PropertyRoute, DeleteProperty)
                 .RequireAuthorization()
                 .WithName("DeleteProperty");
         }
