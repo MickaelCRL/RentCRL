@@ -20,3 +20,21 @@ export async function deletePropertyByIdAsync(
   );
   return response.data;
 }
+
+export async function getPropertyByIdAsync(
+  ownerId: string,
+  propertyId: string
+) {
+  const response = await api.get(`/owners/${ownerId}/properties/${propertyId}`);
+  return response.data;
+}
+
+export async function updatePropertyByIdAsync(
+  ownerId: string,
+  propertyId: string
+) {
+  const response = await api.patch(
+    `/owners/${ownerId}/properties/${propertyId}`
+  );
+  return response.data;
+}

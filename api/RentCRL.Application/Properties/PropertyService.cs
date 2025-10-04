@@ -23,6 +23,24 @@ namespace RentCRL.Application.Properties
             return await _propertyRepository.AddAsync(property);
         }
 
+        public async Task<Result<Property>> UpdatePropertyByIdAsync(Guid propertyId)
+        {
+            var property = await _propertyRepository.GetByIdAsync(propertyId);
+            if (property == null)
+                return PropertyErrors.CouldNotFoundPropertyById;
+
+            return property;
+        }
+
+        public async Task<Result<Property>> GetPropertyByIdAsync(Guid propertyId)
+        {
+            var property = await _propertyRepository.GetByIdAsync(propertyId);
+            if (property == null)
+                return PropertyErrors.CouldNotFoundPropertyById;
+
+            return property;
+        }
+
         public async Task<Result> DeletePropertyByIdAsync(Guid propertyId)
         {
             var property = await _propertyRepository.GetByIdAsync(propertyId);

@@ -6,9 +6,10 @@ import { deletePropertyByIdAsync } from "../../services/properties/propertyServi
 import { useState } from "react";
 import { DeleteConfirmationDialog } from "../ui/DeleteConfirmationDialog";
 import { useUserContext } from "../../contexts/UserContext";
+import { useNavigate } from "react-router";
 
 interface PropertyActionsProps {
-  propertyId?: string;
+  propertyId: string;
   onDeleted: () => void;
 }
 
@@ -18,6 +19,7 @@ export default function PropertyActions({
 }: PropertyActionsProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const { userContext } = useUserContext();
+  const navigate = useNavigate();
 
   const handleDelete = async () => {
     const ownerId = userContext?.id;
@@ -38,7 +40,10 @@ export default function PropertyActions({
       <IconButton aria-label="Détails">
         <InfoOutlinedIcon />
       </IconButton>
-      <IconButton aria-label="Modifier">
+      <IconButton
+        aria-label="Modifier"
+        onClick={() => navigate(`/properties/${propertyId}/edit`)}
+      >
         <EditOutlinedIcon />
       </IconButton>
       <IconButton aria-label="Supprimer" onClick={() => setOpenDialog(true)}>

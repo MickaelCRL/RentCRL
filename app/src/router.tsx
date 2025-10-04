@@ -8,6 +8,7 @@ import Contracts from "./pages/contracts";
 import NewContractPage from "./pages/contracts/new";
 import SelectRolePage from "./pages/select-role";
 import Dashboard from "./pages/dashboard";
+import EditPropertyPage from "./pages/properties/edit";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "/properties/new",
         element: <NewPropertyPage />,
+      },
+      {
+        path: "/properties/:id/edit",
+        element: <EditPropertyPage />,
       },
       {
         path: "/contracts",

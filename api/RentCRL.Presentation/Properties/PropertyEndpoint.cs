@@ -15,25 +15,55 @@ namespace RentCRL.Presentation.Properties
 {
     public static class PropertyEndpoint
     {
-        public const string PropertyRoute = "/owners/{ownerId:guid}/properties";
-        public const string DeletePropertyRoute = "/owners/{ownerId:guid}/properties/{propertyId:guid}";
+        public const string PropertiesRoute = "/owners/{ownerId:guid}/properties";
+        public const string PropertyRoute = "/owners/{ownerId:guid}/properties/{propertyId:guid}";
 
         public static void MapPropertyEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapPost(PropertyRoute, CreateProperty)
+            app.MapPost(PropertiesRoute, CreateProperty)
                 .RequireAuthorization()
                 .WithName("CreateProperty");
 
-            app.MapGet(PropertyRoute, GetProperties)
+            app.MapGet(PropertiesRoute, GetProperties)
                 .RequireAuthorization()
                 .WithName("GetProperties");
 
             app.MapDelete(DeletePropertyRoute, DeleteProperty)
                 .RequireAuthorization()
                 .WithName("DeleteProperty");
+
+            app.MapGet(PropertyRoute, GetProperty)
+               .RequireAuthorization()
+               .WithName("GetProperty");
         }
 
-        internal static async Task<IResult> DeleteProperty(
+        internal static async Task<IResult> PatchProperty(
+           Guid ownerId,
+           Guid propertyId,
+           IOwnerService ownerService,
+           IPropertyService propertyService,
+           ClaimsPrincipal user
+       )
+        {
+            var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
+            if (!IsOwnerEmailValid)
+                return Results.Unauthorized();
+
+            var result = await propertyService.UpdatePropertyByIdAsync(propertyId);
+
+            if (result.IsSuccess)
+            {
+                var property = result.Value;
+                return Results.Ok(property);
+            }
+
+            if (result.Error == PropertyErrors.CouldNotFoundPropertyById)
+                return Results.NotFound();
+
+            return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);
+        }
+
+        internal static async Task<IResult> GetProperty(
             Guid ownerId,
             Guid propertyId,
             IOwnerService ownerService,
@@ -41,11 +71,23 @@ namespace RentCRL.Presentation.Properties
             ClaimsPrincipal user
         )
         {
-            (bool flowControl, IResult value) = AuthorizedUser(ownerId, ownerService, user);
-            if (!flowControl)
+            var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
+            if (!IsOwnerEmailValid)
+                return Results.Unauthorized();
+
+            var result = await propertyService.GetPropertyByIdAsync(propertyId);
+
+            if (result.IsSuccess)
             {
-                return value;
+                var property = result.Value;
+                return Results.Ok(property);
             }
+
+            if (result.Error == PropertyErrors.CouldNotFoundPropertyById)
+                return Results.NotFound();
+
+            return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);
+        }
 
             var result = await propertyService.DeletePropertyByIdAsync(propertyId);
 
