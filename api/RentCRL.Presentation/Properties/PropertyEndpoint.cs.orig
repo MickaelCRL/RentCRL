@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Routing;
 using RentCRL.Application.Properties;
 using RentCRL.Application.Users;
 using RentCRL.Domain.Properties;
+using RentCRL.Domain.Users;
 using RentCRL.Presentation.Addresses;
 using RentCRL.Presentation.Users;
 using System.Security.Claims;
@@ -42,7 +43,7 @@ namespace RentCRL.Presentation.Properties
            IOwnerService ownerService,
            IPropertyService propertyService,
            ClaimsPrincipal user
-        )
+       )
         {
             var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
             if (!IsOwnerEmailValid)
@@ -73,6 +74,7 @@ namespace RentCRL.Presentation.Properties
             var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
             if (!IsOwnerEmailValid)
                 return Results.Unauthorized();
+<<<<<<< HEAD
 
             var result = await propertyService.GetPropertyByIdAsync(propertyId);
 
@@ -81,24 +83,14 @@ namespace RentCRL.Presentation.Properties
                 var property = result.Value;
                 return Results.Ok(property);
             }
+=======
+>>>>>>> feature/delete-properties
 
             if (result.Error == PropertyErrors.CouldNotFoundPropertyById)
                 return Results.NotFound();
 
             return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);
         }
-
-        internal static async Task<IResult> DeleteProperty(
-            Guid ownerId,
-            Guid propertyId,
-            IOwnerService ownerService,
-            IPropertyService propertyService,
-            ClaimsPrincipal user
-        )
-        {
-            var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
-            if (!IsOwnerEmailValid)
-                return Results.Unauthorized();
 
             var result = await propertyService.DeletePropertyByIdAsync(propertyId);
 
@@ -171,7 +163,7 @@ namespace RentCRL.Presentation.Properties
         private async static Task<bool> IsOwnerEmailMatchingClaimsPrincipal(Guid ownerId, IOwnerService ownerService, ClaimsPrincipal user)
         {
             var result = await ownerService.GetOwnerByIdAsync(ownerId);
-            var emailFromOwner = result.Value.Email;
+            var emailFromOwner = result.Value.Email; 
             var emailFromClaimsPrincipal = user.GetEmail();
 
             if (emailFromOwner != emailFromClaimsPrincipal)
