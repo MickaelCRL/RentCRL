@@ -19,11 +19,11 @@ import { createOwnerAsync } from "../services/users/ownerServices";
 
 const Registration = () => {
   const { user, isAuthenticated } = useAuth0();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState("");
   const { userContext, setUserContext } = useUserContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isAuthenticated) {

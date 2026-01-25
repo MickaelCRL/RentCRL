@@ -2,6 +2,8 @@
 using Microsoft.Azure.Cosmos.Linq;
 using RentCRL.Domain.Base;
 using RentCRL.Infrastructure.Database;
+using Serilog;
+using System.Net;
 
 namespace RentCRL.Infrastructure.Base
 {
@@ -9,11 +11,13 @@ namespace RentCRL.Infrastructure.Base
     {
         private readonly CosmosDbSettings _cosmosDbSettings;
         private readonly CosmosClient _cosmosClient;
+        private readonly ILogger _logger;
 
-        public EntityRepository(CosmosDbSettings cosmosDbSettings, CosmosClient cosmosClient)
+        public EntityRepository(CosmosDbSettings cosmosDbSettings, CosmosClient cosmosClient, ILogger logger)
         {
             _cosmosDbSettings = cosmosDbSettings;
             _cosmosClient = cosmosClient;
+            _logger = logger;
         }
 
         protected Container GetContainer()
@@ -25,6 +29,19 @@ namespace RentCRL.Infrastructure.Base
         {
             var response = await GetContainer().CreateItemAsync(entity);
             return response.Resource;
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var stringId = id.ToString();
+            try
+            {
+                var response = await GetContainer().DeleteItemAsync<TEntity>(stringId, new PartitionKey(stringId));
+            }
+            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                _logger.Warning("Entity with Id {EntityId} not found for deletion.", id);
+            }
         }
 
         public async Task<TEntity> GetByIdAsync(Guid id)

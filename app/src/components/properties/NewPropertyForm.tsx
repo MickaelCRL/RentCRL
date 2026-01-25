@@ -2,7 +2,6 @@ import { Box, Button, TextField, Typography, Paper } from "@mui/material";
 import { useState } from "react";
 import Property from "../../model/Property";
 import { useNavigate } from "react-router-dom";
-import SuccessNotification from "../ui/SuccessNotification";
 import Address from "../../model/Address";
 import { createPropertyAsync } from "../../services/properties/propertyServices";
 import { useUserContext } from "../../contexts/UserContext";
@@ -10,7 +9,6 @@ import { useUserContext } from "../../contexts/UserContext";
 function NewPropertyForm() {
   const [property, setProperty] = useState<Property>();
   const [address, setAddress] = useState<Address>();
-  const [successNotificationDisplay, setSnackbarDisplay] = useState(false);
   const { userContext } = useUserContext();
   const navigate = useNavigate();
 
@@ -112,11 +110,6 @@ function NewPropertyForm() {
           </Box>
         </Box>
       </Paper>
-      <SuccessNotification
-        open={successNotificationDisplay}
-        message="Propriété ajoutée avec succès !"
-        onClose={() => setSnackbarDisplay(false)}
-      />
     </>
   );
 }
