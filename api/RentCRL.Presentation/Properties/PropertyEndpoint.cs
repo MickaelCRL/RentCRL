@@ -34,13 +34,18 @@ namespace RentCRL.Presentation.Properties
             app.MapGet(PropertyRoute, GetProperty)
                .RequireAuthorization()
                .WithName("GetProperty");
+
+            app.MapPatch(PropertyRoute, PatchProperty)
+               .RequireAuthorization()
+               .WithName("PatchProperty");
         }
 
         internal static async Task<IResult> PatchProperty(
            Guid ownerId,
-           Guid propertyId,
+           PropertyModel propertyModel,
            IOwnerService ownerService,
            IPropertyService propertyService,
+           IValidator<PropertyModel> validator,
            ClaimsPrincipal user
         )
         {
@@ -48,11 +53,21 @@ namespace RentCRL.Presentation.Properties
             if (!IsOwnerEmailValid)
                 return Results.Unauthorized();
 
-            var result = await propertyService.UpdatePropertyByIdAsync(propertyId);
+            var validationResult = validator.Validate(propertyModel);
+            if (!validationResult.IsValid)
+                return Results.ValidationProblem(validationResult.ToDictionary());
+
+            var result = await propertyService.UpdatePropertyAsync(
+                propertyModel.Id,
+                propertyModel.Name,
+                propertyModel.Surface,
+                propertyModel.Status,
+                propertyModel.Address.ToAddress()
+            );
 
             if (result.IsSuccess)
             {
-                var property = result.Value;
+                var property = result.Value.ToModel();
                 return Results.Ok(property);
             }
 
