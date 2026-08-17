@@ -49,8 +49,8 @@ namespace RentCRL.Presentation.Properties
            ClaimsPrincipal user
         )
         {
-            var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
-            if (!IsOwnerEmailValid)
+            var isOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
+            if (!isOwnerEmailValid)
                 return Results.Unauthorized();
 
             var validationResult = validator.Validate(propertyModel);
