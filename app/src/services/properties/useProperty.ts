@@ -1,11 +1,12 @@
 import useSWR from "swr";
-import { getPropertiesByOwnerIdAsync } from "./propertyServices";
 import Property from "../../model/Property";
+import { getPropertyByIdAsync } from "./propertyServices";
 
-function useProperty(ownerId?: string) {
-  const { data, error, isLoading, mutate } = useSWR<Property[]>(
-    ownerId,
-    getPropertiesByOwnerIdAsync,
+function useProperty(ownerId?: string, propertyId?: string) {
+  const { data, error, isLoading, mutate } = useSWR<Property>(
+    [ownerId, propertyId],
+    ([ownerId, propertyId]) =>
+      getPropertyByIdAsync(ownerId, propertyId as string),
     {
       onErrorRetry: (error, _key, _config, revalidate, { retryCount }) => {
         if (error.status === 404) return;
@@ -21,7 +22,7 @@ function useProperty(ownerId?: string) {
   }
 
   return {
-    properties: data,
+    property: data,
     isLoading,
     isError,
     mutate,

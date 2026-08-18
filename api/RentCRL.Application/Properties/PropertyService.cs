@@ -2,6 +2,9 @@
 using RentCRL.Domain.Base;
 using RentCRL.Domain.Properties;
 using RentCRL.Domain.Results;
+using System;
+using System.Collections.Concurrent;
+using System.ComponentModel;
 using System.Net;
 
 namespace RentCRL.Application.Properties
@@ -21,6 +24,27 @@ namespace RentCRL.Application.Properties
         {
             var property = new Property(_guidProvider.NewGuid(), name, surface, status, address, ownerId);
             return await _propertyRepository.AddAsync(property);
+        }
+
+        public async Task<Result<Property>> UpdatePropertyAsync(Guid propertyId, string name, decimal surface, string status, Address address)
+        {
+            var property = await GetPropertyByIdAsync(propertyId);
+            if (property != null) 
+            {
+                var result = await _propertyRepository.UpdatePropertyAsync(propertyId, name, surface, status, address);
+                return result;
+            }
+            
+            return property;
+        }
+
+        public async Task<Result<Property>> GetPropertyByIdAsync(Guid propertyId)
+        {
+            var property = await _propertyRepository.GetByIdAsync(propertyId);
+            if (property == null)
+                return PropertyErrors.CouldNotFoundPropertyById;
+
+            return property;
         }
 
         public async Task<Result> DeletePropertyByIdAsync(Guid propertyId)

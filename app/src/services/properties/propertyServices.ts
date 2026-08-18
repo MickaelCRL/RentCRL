@@ -13,10 +13,30 @@ export async function getPropertiesByOwnerIdAsync(ownerId?: string) {
 
 export async function deletePropertyByIdAsync(
   ownerId: string,
-  propertyId: string
+  propertyId: string,
 ) {
   const response = await api.delete(
-    `/owners/${ownerId}/properties/${propertyId}`
+    `/owners/${ownerId}/properties/${propertyId}`,
+  );
+  return response.data;
+}
+
+export async function getPropertyByIdAsync(
+  ownerId: string,
+  propertyId: string,
+) {
+  const response = await api.get(`/owners/${ownerId}/properties/${propertyId}`);
+  return response.data;
+}
+
+export async function updatePropertyAsync(
+  ownerId: string,
+  propertyId: String,
+  property: Property,
+) {
+  const response = await api.patch(
+    `/owners/${ownerId}/properties/${property.id}`,
+    property,
   );
   return response.data;
 }
