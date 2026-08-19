@@ -21,6 +21,8 @@ const Registration = () => {
   const { user, isAuthenticated } = useAuth0();
   const [loading, setLoading] = useState(false);
 
+  const [firstName, setFirstName] = useState(user?.given_name || "");
+  const [lastName, setLastName] = useState(user?.family_name || "");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState("");
 
@@ -45,6 +47,13 @@ const Registration = () => {
     }
   }, [user, isAuthenticated, navigate, userContext]);
 
+  useEffect(() => {
+    if (user) {
+      if (user.given_name && !firstName) setFirstName(user.given_name);
+      if (user.family_name && !lastName) setLastName(user.family_name);
+    }
+  }, [user]);
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPhoneNumber(value);
@@ -63,8 +72,8 @@ const Registration = () => {
   const handleSubmit = async () => {
     const owner: Owner = {
       auth0Id: user?.sub,
-      lastname: user?.family_name,
-      firstname: user?.given_name,
+      lastName: lastName.trim(),
+      firstName: firstName.trim(),
       email: user?.email,
       phoneNumber,
       entityType: "Owner",
@@ -91,6 +100,8 @@ const Registration = () => {
   };
 
   const isFormValid =
+    firstName.trim() !== "" &&
+    lastName.trim() !== "" &&
     phoneNumber !== "" &&
     phoneNumberError === "" &&
     address.line1.trim() !== "" &&
@@ -127,18 +138,18 @@ const Registration = () => {
                   fullWidth
                   variant="outlined"
                   label="Nom"
-                  name="lastname"
-                  value={user.family_name || ""}
-                  disabled
+                  name="lastName"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                   required
                 />
                 <TextField
                   fullWidth
                   variant="outlined"
                   label="Prénom"
-                  name="firstname"
-                  value={user.given_name || ""}
-                  disabled
+                  name="firstName"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   required
                 />
                 <TextField
