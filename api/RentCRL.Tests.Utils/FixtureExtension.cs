@@ -19,5 +19,16 @@ namespace RentCRL.Tests.Utils
             var phoneNumber = $"+{string.Join("", numberList)}";
             return phoneNumber;
         }
+
+        public static Address CreateAddress(this Fixture fixture)
+        {
+            return new Address(
+                fixture.Create<string>(),
+                fixture.Create<string>(),
+                fixture.Create<string>(),
+                fixture.Create<string>(),
+                fixture.Create<string>()
+            );
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using RentCRL.Domain.Base;
+﻿using RentCRL.Domain;
+using RentCRL.Domain.Base;
 using RentCRL.Domain.Results;
 using RentCRL.Domain.Users;
 
@@ -15,13 +16,13 @@ namespace RentCRL.Application.Users
             _ownerRepository = ownerRepository;
         }
 
-        public async Task<Result<Owner>> CreateOwnerAsync(string auth0Id, string firstName, string lastName, string email, string phoneNumber)
+        public async Task<Result<Owner>> CreateOwnerAsync(string auth0Id, string firstName, string lastName, string email, string phoneNumber, Address address)
         {
             var owner = await _ownerRepository.GetByEmailAsync(email);
             if (owner != null)
                 return UserErrors.EmailAlreadyExists;
 
-            var newOwner = new Owner(_guidProvider.NewGuid(), auth0Id, firstName, lastName, email, phoneNumber);
+            var newOwner = new Owner(_guidProvider.NewGuid(), auth0Id, firstName, lastName, email, phoneNumber, address);
             var response = await _ownerRepository.AddAsync(newOwner);
 
             return response;

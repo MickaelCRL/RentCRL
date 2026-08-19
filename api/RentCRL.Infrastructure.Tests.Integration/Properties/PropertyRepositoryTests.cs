@@ -2,8 +2,8 @@
 using RentCRL.Domain.Properties;
 using RentCRL.Infrastructure.Properties;
 using RentCRL.Tests.Utils;
+using Serilog;
 using Shouldly;
-using System.Threading.Tasks;
 
 namespace RentCRL.Infrastructure.Tests.Integration.Properties
 {
@@ -15,7 +15,8 @@ namespace RentCRL.Infrastructure.Tests.Integration.Properties
         public async Task Setup() 
         {
             await BaseSetUp();
-            _propertyRepository = new PropertyRepository(_cosmosDbTestEnvironment.Settings, _cosmosDbTestEnvironment.Client);
+            var silentLogger = new LoggerConfiguration().CreateLogger();
+            _propertyRepository = new PropertyRepository(_cosmosDbTestEnvironment.Settings, _cosmosDbTestEnvironment.Client, silentLogger);
         }
 
         [Test, AutoData]

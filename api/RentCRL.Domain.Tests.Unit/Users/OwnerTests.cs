@@ -27,8 +27,9 @@ namespace RentCRL.Domain.Tests.Unit.Users
         {
             var email = _fixture.CreateEmail();
             var phoneNumber = _fixture.CreatePhoneNumber();
+            var address = _fixture.Create<Address>();
 
-            var owner = new Owner(id, auth0Id, firstName, lastName, email, phoneNumber);
+            var owner = new Owner(id, auth0Id, firstName, lastName, email, phoneNumber, address);
 
             owner.EntityType.ShouldBe(nameof(Owner));
         }

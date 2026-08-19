@@ -2,6 +2,7 @@
 using RentCRL.Domain.Users;
 using RentCRL.Infrastructure.Users;
 using RentCRL.Tests.Utils;
+using Serilog;
 using Shouldly;
 
 namespace RentCRL.Infrastructure.Tests.Integration.Users
@@ -16,7 +17,8 @@ namespace RentCRL.Infrastructure.Tests.Integration.Users
         {
             await BaseSetUp();
             _fixture = new Fixture();
-            _ownerRepository = new OwnerRepository(_cosmosDbTestEnvironment.Settings, _cosmosDbTestEnvironment.Client);
+            var silentLogger = new LoggerConfiguration().CreateLogger();
+            _ownerRepository = new OwnerRepository(_cosmosDbTestEnvironment.Settings, _cosmosDbTestEnvironment.Client, silentLogger);
         }
 
         [Test]
