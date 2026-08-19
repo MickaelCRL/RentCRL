@@ -2,9 +2,11 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Avatar, Popover, Typography } from "@mui/material";
 import { useState } from "react";
 import LogoutButton from "./LogoutButton";
+import { useUserContext } from "../../contexts/UserContext";
 
 function Profile() {
   const { user } = useAuth0();
+  const { userContext } = useUserContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const open = Boolean(anchorEl);
@@ -17,6 +19,12 @@ function Profile() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const displayName =
+    userContext?.firstName && userContext?.lastName
+      ? `${userContext.firstName} ${userContext.lastName}`
+      : user?.name;
+
   return (
     <>
       {user && (
@@ -48,7 +56,7 @@ function Profile() {
                 alt="user picture"
                 sx={{ width: 100, height: 100, margin: "auto" }}
               />
-              <Typography variant="h6">{user.name}</Typography>
+              <Typography variant="h6">{displayName}</Typography>
               <Typography variant="body1">{user.email}</Typography>
               <LogoutButton />
             </Typography>

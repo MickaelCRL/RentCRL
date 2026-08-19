@@ -1,4 +1,6 @@
-﻿using RentCRL.Domain.Users;
+﻿using RentCRL.Domain;
+using RentCRL.Domain.Users;
+using RentCRL.Presentation.Addresses;
 
 namespace RentCRL.Presentation.Users
 {
@@ -12,7 +14,8 @@ namespace RentCRL.Presentation.Users
                 owner.FirstName,
                 owner.LastName,
                 owner.Email,
-                owner.PhoneNumber
+                owner.PhoneNumber,
+                owner.Address.ToModel()
             );
         }
     }

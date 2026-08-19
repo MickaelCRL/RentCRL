@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using RentCRL.Application.Users;
+using RentCRL.Domain;
 using RentCRL.Domain.Users;
 
 namespace RentCRL.Presentation.Users
@@ -25,12 +26,21 @@ namespace RentCRL.Presentation.Users
             if (!validationResult.IsValid)
                 return Results.ValidationProblem(validationResult.ToDictionary());
 
+            var domainAddress = new Address(
+                ownerModel.Address.Line1,
+                ownerModel.Address.Line2,
+                ownerModel.Address.PostalCode,
+                ownerModel.Address.City,
+                ownerModel.Address.Country
+            );
+
             var result = await ownerService.CreateOwnerAsync(
                 ownerModel.Auth0Id,
                 ownerModel.FirstName,
                 ownerModel.LastName,
                 ownerModel.Email,
-                ownerModel.PhoneNumber
+                ownerModel.PhoneNumber,
+                domainAddress
             );
 
             if (result.IsSuccess)

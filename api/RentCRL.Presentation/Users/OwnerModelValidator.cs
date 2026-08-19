@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using RentCRL.Domain;
+using RentCRL.Presentation.Addresses;
 
 namespace RentCRL.Presentation.Users
 {
@@ -12,6 +13,7 @@ namespace RentCRL.Presentation.Users
             RuleFor(o => o.LastName).NotEmpty();
             RuleFor(o => o.Email).NotEmpty().Matches(Regexes.Email);
             RuleFor(o => o.PhoneNumber).NotEmpty().Matches(Regexes.PhoneNumber);
+            RuleFor(o => o.Address).NotNull().SetValidator(new AddressModelValidator());
         }
     }
 }

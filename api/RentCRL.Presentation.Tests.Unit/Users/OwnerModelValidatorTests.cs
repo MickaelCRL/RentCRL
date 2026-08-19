@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using FluentValidation.TestHelper;
+using RentCRL.Presentation.Addresses;
 using RentCRL.Presentation.Users;
 using RentCRL.Tests.Utils;
 
@@ -16,6 +17,7 @@ namespace RentCRL.Presentation.Tests.Unit.Users
         {
             _fixture = new();
             _validator = new();
+
             _ownerModel = new
             (
                 _fixture.Create<Guid>(),
@@ -23,7 +25,8 @@ namespace RentCRL.Presentation.Tests.Unit.Users
                 _fixture.Create<string>(),
                 _fixture.Create<string>(),
                 _fixture.CreateEmail(),
-                _fixture.CreatePhoneNumber()
+                _fixture.CreatePhoneNumber(),
+                _fixture.CreateAddress().ToModel()
             );
         }
 
@@ -65,6 +68,14 @@ namespace RentCRL.Presentation.Tests.Unit.Users
             var ownerModel = _ownerModel with { PhoneNumber = string.Empty };
             var result = _validator.TestValidate(ownerModel);
             result.ShouldHaveValidationErrorFor(o => o.PhoneNumber);
+        }
+
+        [Test]
+        public void Validate_AddressIsNull_Error()
+        {
+            var ownerModel = _ownerModel with { Address = null };
+            var result = _validator.TestValidate(ownerModel);
+            result.ShouldHaveValidationErrorFor(o => o.Address);
         }
     }
 }

@@ -2,6 +2,7 @@
 using AutoFixture.NUnit3;
 using Moq;
 using RentCRL.Application.Users;
+using RentCRL.Domain;
 using RentCRL.Domain.Base;
 using RentCRL.Domain.Users;
 using RentCRL.Tests.Utils;
@@ -30,6 +31,7 @@ namespace RentCRL.Application.Tests.Unit.Users
         {
             var email = _fixture.CreateEmail();
             var phoneNumber = _fixture.CreatePhoneNumber();
+            var address = new Address("12 rue", null, "75000", "Paris", "France");
             _guidProviderMock
                 .Setup(p => p.NewGuid())
                 .Returns(ownerId);
@@ -41,7 +43,7 @@ namespace RentCRL.Application.Tests.Unit.Users
                 .Callback((Owner owner) => { ownerCreated = owner; })
                 .ReturnsAsync((Owner owner) => owner);
 
-            await _ownerService.CreateOwnerAsync(auth0Id, firstName, lastName, email, phoneNumber);
+            await _ownerService.CreateOwnerAsync(auth0Id, firstName, lastName, email, phoneNumber, address);
 
             ownerCreated.ShouldNotBeNull();
             ownerCreated.Auth0Id.ShouldBe(auth0Id);
@@ -49,6 +51,7 @@ namespace RentCRL.Application.Tests.Unit.Users
             ownerCreated.LastName.ShouldBe(lastName);
             ownerCreated.Email.ShouldBe(email);
             ownerCreated.PhoneNumber.ShouldBe(phoneNumber);
+            ownerCreated.Address.ShouldBe(address);
         }
 
         [Test, AutoData]
@@ -56,6 +59,7 @@ namespace RentCRL.Application.Tests.Unit.Users
         {
             var email = _fixture.CreateEmail();
             var phoneNumber = _fixture.CreatePhoneNumber();
+            var address = new Address("12 rue", null, "75000", "Paris", "France");
             _guidProviderMock 
                 .Setup(p => p.NewGuid())
                 .Returns(ownerId);
@@ -63,13 +67,14 @@ namespace RentCRL.Application.Tests.Unit.Users
             var owner = OwnerBuilder
                 .Build()
                 .WithEmail(email)
+                .WithAddress(address)
                 .Create();
 
             _ownerRepositoryMock
                 .Setup(r => r.GetByEmailAsync(email))
                 .ReturnsAsync(owner);
 
-            var response = await _ownerService.CreateOwnerAsync(auth0Id, firstName, lastName, email, phoneNumber);
+            var response = await _ownerService.CreateOwnerAsync(auth0Id, firstName, lastName, email, phoneNumber, address);
 
             response.IsSuccess.ShouldBeFalse();
             response.Error.ShouldBe(UserErrors.EmailAlreadyExists);
