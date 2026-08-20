@@ -1,7 +1,7 @@
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import { deletePropertyByIdAsync } from "../../services/properties/propertyServices";
 import { useState } from "react";
 import { DeleteConfirmationDialog } from "../ui/DeleteConfirmationDialog";
@@ -28,27 +28,33 @@ export default function PropertyActions({
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "flex-end",
-        mt: 2,
-        mr: "auto",
-        ml: "auto",
-      }}
-    >
-      <IconButton aria-label="Détails">
-        <InfoOutlinedIcon />
-      </IconButton>
-      <IconButton
-        aria-label="Modifier"
-        onClick={() => navigate(`/properties/${propertyId}/edit`)}
-      >
-        <EditOutlinedIcon />
-      </IconButton>
-      <IconButton aria-label="Supprimer" onClick={() => setOpenDialog(true)}>
-        <DeleteOutlineIcon />
-      </IconButton>
+    <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 0.5 }}>
+      <Tooltip title="Détails">
+        <IconButton
+          size="small"
+          onClick={() => navigate(`/properties/${propertyId}`)}
+        >
+          <InfoOutlinedIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Modifier">
+        <IconButton
+          size="small"
+          onClick={() => navigate(`/properties/${propertyId}/edit`)}
+        >
+          <EditOutlinedIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Supprimer">
+        <IconButton
+          size="small"
+          onClick={() => setOpenDialog(true)}
+          color="error"
+        >
+          <DeleteOutlineIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+
       <DeleteConfirmationDialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
