@@ -1,8 +1,10 @@
 ﻿using Microsoft.Azure.Cosmos;
 using RentCRL.Domain.Base;
+using RentCRL.Domain.Contracts;
 using RentCRL.Domain.Properties;
 using RentCRL.Domain.Users;
 using RentCRL.Infrastructure.Base;
+using RentCRL.Infrastructure.Contracts;
 using RentCRL.Infrastructure.Database;
 using RentCRL.Infrastructure.Properties;
 using RentCRL.Infrastructure.Users;
@@ -22,6 +24,7 @@ namespace RentCRL.Web.DependencyInjection
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOwnerRepository, OwnerRepository>();
             services.AddScoped<IPropertyRepository, PropertyRepository>();
+            services.AddScoped<IContractRepository, ContractRepository>();
         }
 
         public static void AddDatabaseConnection(WebApplicationBuilder builder)

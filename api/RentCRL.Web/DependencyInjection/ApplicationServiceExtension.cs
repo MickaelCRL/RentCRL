@@ -1,4 +1,5 @@
-﻿using RentCRL.Application.Properties;
+﻿using RentCRL.Application.Contracts;
+using RentCRL.Application.Properties;
 using RentCRL.Application.Users;
 
 namespace RentCRL.Web.DependencyInjection
@@ -12,6 +13,7 @@ namespace RentCRL.Web.DependencyInjection
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IOwnerService, OwnerService>();
             services.AddTransient<IPropertyService, PropertyService>();
+            services.AddTransient<IContractService, ContractService>();
         }
     }
 }

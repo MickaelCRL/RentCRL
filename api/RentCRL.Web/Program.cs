@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using RentCRL.Presentation.Contracts;
 using RentCRL.Presentation.Properties;
 using RentCRL.Presentation.Users;
 using RentCRL.Web;
@@ -94,5 +95,6 @@ app.UseAuthorization();
 app.MapUserEndpoint();
 app.MapOwnerEndpoint();
 app.MapPropertyEndpoint();
+app.MapContractEndpoint();
 
 app.Run();

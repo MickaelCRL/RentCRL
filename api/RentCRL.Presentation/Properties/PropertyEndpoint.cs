@@ -49,7 +49,7 @@ namespace RentCRL.Presentation.Properties
            ClaimsPrincipal user
         )
         {
-            var isOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
+            var isOwnerEmailValid = await user.IsOwnerEmailMatchingAsync(ownerId, ownerService);
             if (!isOwnerEmailValid)
                 return Results.Unauthorized();
 
@@ -85,7 +85,7 @@ namespace RentCRL.Presentation.Properties
             ClaimsPrincipal user
         )
         {
-            var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
+            var IsOwnerEmailValid = await user.IsOwnerEmailMatchingAsync(ownerId, ownerService);
             if (!IsOwnerEmailValid)
                 return Results.Unauthorized();
 
@@ -111,7 +111,7 @@ namespace RentCRL.Presentation.Properties
             ClaimsPrincipal user
         )
         {
-            var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
+            var IsOwnerEmailValid = await user.IsOwnerEmailMatchingAsync(ownerId, ownerService);
             if (!IsOwnerEmailValid)
                 return Results.Unauthorized();
 
@@ -130,7 +130,7 @@ namespace RentCRL.Presentation.Properties
             ClaimsPrincipal user
         )
         {
-            var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
+            var IsOwnerEmailValid = await user.IsOwnerEmailMatchingAsync(ownerId, ownerService);
             if (!IsOwnerEmailValid)
                 return Results.Unauthorized();
 
@@ -162,7 +162,7 @@ namespace RentCRL.Presentation.Properties
             if (!validationResult.IsValid)
                 return Results.ValidationProblem(validationResult.ToDictionary());
 
-            var IsOwnerEmailValid = await IsOwnerEmailMatchingClaimsPrincipal(ownerId, ownerService, user);
+            var IsOwnerEmailValid = await user.IsOwnerEmailMatchingAsync(ownerId, ownerService);
             if (!IsOwnerEmailValid)
                 return Results.Unauthorized();
 
@@ -181,18 +181,6 @@ namespace RentCRL.Presentation.Properties
             }
 
             return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);
-        }
-
-        private async static Task<bool> IsOwnerEmailMatchingClaimsPrincipal(Guid ownerId, IOwnerService ownerService, ClaimsPrincipal user)
-        {
-            var result = await ownerService.GetOwnerByIdAsync(ownerId);
-            var emailFromOwner = result.Value.Email;
-            var emailFromClaimsPrincipal = user.GetEmail();
-
-            if (emailFromOwner != emailFromClaimsPrincipal)
-                return false;
-
-            return true;
         }
     }
 }

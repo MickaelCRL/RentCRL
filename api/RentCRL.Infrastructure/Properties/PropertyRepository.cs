@@ -2,11 +2,9 @@
 using Microsoft.Azure.Cosmos.Linq;
 using RentCRL.Domain;
 using RentCRL.Domain.Properties;
-using RentCRL.Domain.Results;
 using RentCRL.Infrastructure.Base;
 using RentCRL.Infrastructure.Database;
 using Serilog;
-using System.ComponentModel;
 
 namespace RentCRL.Infrastructure.Properties
 {
