@@ -55,7 +55,7 @@ function NewPropertyForm() {
       await createPropertyAsync(ownerId, newProperty);
       navigate("/properties");
     } catch (error) {
-      console.error("Erreur lors de l'ajout", error);
+      console.error("Error while adding", error);
     } finally {
       setIsSubmitting(false);
     }

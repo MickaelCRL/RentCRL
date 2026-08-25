@@ -1,8 +1,7 @@
-interface Tenant {
-  lastname: string;
-  firstname: string;
-  email: string;
-  phone: string;
+import User from "./User";
+
+interface Tenant extends User {
+  entityType?: "Tenant";
 }
 
 export default Tenant;

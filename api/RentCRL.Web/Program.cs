@@ -52,6 +52,11 @@ builder.Services.AddAuthorization(options =>
     }
     );
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+});
+
 builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
 // Add services to the container.

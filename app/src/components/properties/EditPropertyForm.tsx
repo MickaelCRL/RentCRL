@@ -54,10 +54,10 @@ function EditPropertyForm() {
       } as Property;
 
       const ownerId = userContext?.id || "";
-      await updatePropertyAsync(ownerId, id, updatedProperty);
+      await updatePropertyAsync(ownerId, updatedProperty);
       navigate("/properties");
     } catch (error) {
-      console.error("Erreur lors de la modification", error);
+      console.error("Error while modifying", error);
     } finally {
       setIsSubmitting(false);
     }
