@@ -1,25 +1,35 @@
 import { Box, Typography, Paper } from "@mui/material";
 import Header from "../components/Header";
+import ContractsTable from "../components/contracts/ContractsTable";
 import DashboardLayout from "../components/dashboard/DashboardLayout";
-import AddPropertyButton from "../components/properties/AddPropertyButton";
 import BreadcrumbsNav from "../components/ui/Breadcrumbs";
-import { useUserContext } from "../contexts/UserContext";
+import CreateContractButton from "../components/contracts/CreateContractButton";
 import BreadcrumbItem from "../model/BreadcrumbItem";
+import { useUserContext } from "../contexts/UserContext";
+import useContracts from "../services/contracts/useContracts";
 import useProperties from "../services/properties/useProperties";
 import SpinnerLoading from "../components/ui/SpinnerLoading";
 import Error from "../components/ui/Error";
-import PropertiesTable from "../components/properties/PropertiesTable";
 
-function Properties() {
+function Contracts() {
   const { userContext } = useUserContext();
-  const { properties, isLoading, isError, mutate } = useProperties(
+
+  const {
+    contracts,
+    isLoading: isContractsLoading,
+    isError: isContractsError,
+  } = useContracts(userContext?.id);
+  const { properties, isLoading: isPropertiesLoading } = useProperties(
     userContext?.id,
   );
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: "Tableau de bord" },
-    { label: "Mes propriétés" },
+    { label: "Mes contrats" },
   ];
+
+  const isLoading = isContractsLoading || isPropertiesLoading;
+  const isError = isContractsError;
 
   return (
     <>
@@ -37,8 +47,8 @@ function Properties() {
             mt: 2,
           }}
         >
-          <Typography variant="h5">Mes propriétés</Typography>
-          <AddPropertyButton />
+          <Typography variant="h5">Mes contrats</Typography>
+          <CreateContractButton />
         </Box>
 
         <Box mt={4}>
@@ -46,7 +56,8 @@ function Properties() {
             <SpinnerLoading />
           ) : isError ? (
             <Error />
-          ) : !properties || properties.length === 0 ? (
+          ) : !contracts || contracts.length === 0 ? (
+            // L'état vide professionnel
             <Paper
               sx={{
                 p: 6,
@@ -57,15 +68,18 @@ function Properties() {
               }}
             >
               <Typography variant="h6" color="text.secondary" gutterBottom>
-                Aucune propriété
+                Aucun contrat
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Vous n'avez pas encore ajouté de bien immobilier. Cliquez sur
-                "Ajouter une propriété" pour commencer.
+                Vous n'avez pas encore créé de bail. Cliquez sur "Créer un
+                contrat" pour inviter un locataire.
               </Typography>
             </Paper>
           ) : (
-            <PropertiesTable properties={properties} onMutate={mutate} />
+            <ContractsTable
+              contracts={contracts}
+              properties={properties || []}
+            />
           )}
         </Box>
       </DashboardLayout>
@@ -73,4 +87,4 @@ function Properties() {
   );
 }
 
-export default Properties;
+export default Contracts;

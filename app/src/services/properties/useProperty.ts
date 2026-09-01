@@ -4,16 +4,17 @@ import { getPropertyByIdAsync } from "./propertyServices";
 
 function useProperty(ownerId?: string, propertyId?: string) {
   const { data, error, isLoading, mutate } = useSWR<Property>(
-    [ownerId, propertyId],
-    ([ownerId, propertyId]) =>
-      getPropertyByIdAsync(ownerId, propertyId as string),
+    ownerId && propertyId ? ["property", ownerId, propertyId] : null,
+
+    ([, oId, pId]: [string, string, string]) => getPropertyByIdAsync(oId, pId),
+
     {
       onErrorRetry: (error, _key, _config, revalidate, { retryCount }) => {
         if (error.status === 404) return;
         if (retryCount >= 10) return;
         setTimeout(() => revalidate({ retryCount }), 5000);
       },
-    }
+    },
   );
 
   let isError = error;

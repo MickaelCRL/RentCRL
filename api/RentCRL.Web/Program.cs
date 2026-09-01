@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using RentCRL.Presentation.Contracts;
 using RentCRL.Presentation.Properties;
 using RentCRL.Presentation.Users;
 using RentCRL.Web;
@@ -51,6 +52,11 @@ builder.Services.AddAuthorization(options =>
     }
     );
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+});
+
 builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
 // Add services to the container.
@@ -94,5 +100,6 @@ app.UseAuthorization();
 app.MapUserEndpoint();
 app.MapOwnerEndpoint();
 app.MapPropertyEndpoint();
+app.MapContractEndpoint();
 
 app.Run();

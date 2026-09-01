@@ -2,11 +2,9 @@
 using Microsoft.Azure.Cosmos.Linq;
 using RentCRL.Domain;
 using RentCRL.Domain.Properties;
-using RentCRL.Domain.Results;
 using RentCRL.Infrastructure.Base;
 using RentCRL.Infrastructure.Database;
 using Serilog;
-using System.ComponentModel;
 
 namespace RentCRL.Infrastructure.Properties
 {
@@ -25,8 +23,16 @@ namespace RentCRL.Infrastructure.Properties
                               })
                               .Where(p => p.OwnerId == ownerId && p.EntityType == nameof(Property))
                               .ToFeedIterator();
-            var response = await feedIterator.ReadNextAsync();
-            return response.ToList();
+            
+            var results = new List<Property>();
+
+            while (feedIterator.HasMoreResults)
+            {
+                var response = await feedIterator.ReadNextAsync();
+                results.AddRange(response);
+            }
+
+            return results;
         }
 
         public async Task<Property> UpdatePropertyAsync(Guid propertyId, string name, decimal surface, string status, Address address)

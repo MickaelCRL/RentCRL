@@ -20,14 +20,19 @@ function SelectRolePage() {
   const [role, setRole] = useState("");
   const [message, setMessage] = useState("");
   const { isAuthenticated, isLoading } = useAuth0();
-  const { setUserContext } = useUserContext();
+  const { userContext, setUserContext, isUserContextLoading } =
+    useUserContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (isLoading || isUserContextLoading) return;
+
+    if (!isAuthenticated) {
       navigate("/");
+    } else if (userContext?.id) {
+      navigate("/dashboard");
     }
-  }, [isAuthenticated, isLoading, navigate]);
+  }, [isAuthenticated, isLoading, isUserContextLoading, navigate, userContext]);
 
   const handleSelect = async () => {
     if (!role) return;
@@ -48,7 +53,7 @@ function SelectRolePage() {
 
   return (
     <>
-      {isAuthenticated && (
+      {isAuthenticated && !userContext?.id && (
         <>
           <Header />
           <Container maxWidth="sm" sx={{ mt: 20 }}>

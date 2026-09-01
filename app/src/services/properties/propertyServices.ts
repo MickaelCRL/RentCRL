@@ -29,11 +29,7 @@ export async function getPropertyByIdAsync(
   return response.data;
 }
 
-export async function updatePropertyAsync(
-  ownerId: string,
-  propertyId: String,
-  property: Property,
-) {
+export async function updatePropertyAsync(ownerId: string, property: Property) {
   const response = await api.patch(
     `/owners/${ownerId}/properties/${property.id}`,
     property,

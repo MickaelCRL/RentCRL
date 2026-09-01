@@ -34,18 +34,21 @@ const Registration = () => {
     country: "France",
   });
 
-  const { userContext, setUserContext } = useUserContext();
+  const { userContext, setUserContext, isUserContextLoading } =
+    useUserContext();
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (isUserContextLoading) return;
+
     if (!isAuthenticated) {
       navigate("/");
-    }
-
-    if (isAuthenticated && !userContext?.entityType) {
+    } else if (userContext?.id) {
+      navigate("/dashboard");
+    } else if (!userContext?.entityType) {
       navigate("/select-role");
     }
-  }, [user, isAuthenticated, navigate, userContext]);
+  }, [isAuthenticated, isUserContextLoading, navigate, userContext]);
 
   useEffect(() => {
     if (user) {
@@ -93,7 +96,7 @@ const Registration = () => {
       setUserContext(response);
       navigate("/dashboard");
     } catch (error) {
-      console.error("Erreur lors de la création du profil :", error);
+      console.error("Error creating profile :", error);
     } finally {
       setLoading(false);
     }

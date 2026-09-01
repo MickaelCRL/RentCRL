@@ -1,11 +1,11 @@
 import useSWR from "swr";
-import { getPropertiesByOwnerIdAsync } from "./propertyServices";
-import Property from "../../model/Property";
+import { getContractsByOwnerIdAsync } from "./contractServices";
+import Contract from "../../model/Contract";
 
-function useProperties(ownerId?: string) {
-  const { data, error, isLoading, mutate } = useSWR<Property[]>(
-    ownerId ? ["properties", ownerId] : null,
-    ([, id]: [string, string]) => getPropertiesByOwnerIdAsync(id),
+function useContracts(ownerId?: string) {
+  const { data, error, isLoading, mutate } = useSWR<Contract[]>(
+    ownerId ? ["contracts", ownerId] : null,
+    ([, id]: [string, string]) => getContractsByOwnerIdAsync(id),
     {
       onErrorRetry: (error, _key, _config, revalidate, { retryCount }) => {
         if (error.status === 404) return;
@@ -21,11 +21,11 @@ function useProperties(ownerId?: string) {
   }
 
   return {
-    properties: data,
+    contracts: data,
     isLoading,
     isError,
     mutate,
   };
 }
 
-export default useProperties;
+export default useContracts;
