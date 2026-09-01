@@ -50,7 +50,7 @@ namespace RentCRL.Tests.Utils
         public Contract Create()
         {
             return new Contract(
-                _fixture.Create<Guid>(),
+                _id,
                 _ownerId,
                 _propertyId,
                 _tenantId,

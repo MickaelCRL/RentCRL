@@ -51,6 +51,9 @@ namespace RentCRL.Presentation.Contracts
 
             if (result.IsSuccess)
             {
+                if (result.Value.OwnerId != ownerId)
+                    return Results.Forbid();
+
                 var contract = result.Value.ToModel();
                 return Results.Ok(contract);
             }
@@ -72,6 +75,10 @@ namespace RentCRL.Presentation.Contracts
             var isOwnerEmailValid = await user.IsOwnerEmailMatchingAsync(ownerId, ownerService);
             if (!isOwnerEmailValid)
                 return Results.Unauthorized();
+
+            var contractResult = await contractService.GetContractByIdAsync(contractId);
+            if (!contractResult.IsSuccess)
+                return Results.NotFound();
 
             var result = await contractService.DeleteContractByIdAsync(contractId);
 
@@ -133,7 +140,7 @@ namespace RentCRL.Presentation.Contracts
                 contractModel.FamilyAllowanceFundAmount,
                 contractModel.StartDate,
                 contractModel.EndDate,
-                contractModel.Note
+                contractModel.Note ?? string.Empty
             );
 
             if (result.IsSuccess)

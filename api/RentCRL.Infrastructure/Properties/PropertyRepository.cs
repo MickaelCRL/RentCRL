@@ -23,8 +23,16 @@ namespace RentCRL.Infrastructure.Properties
                               })
                               .Where(p => p.OwnerId == ownerId && p.EntityType == nameof(Property))
                               .ToFeedIterator();
-            var response = await feedIterator.ReadNextAsync();
-            return response.ToList();
+            
+            var results = new List<Property>();
+
+            while (feedIterator.HasMoreResults)
+            {
+                var response = await feedIterator.ReadNextAsync();
+                results.AddRange(response);
+            }
+
+            return results;
         }
 
         public async Task<Property> UpdatePropertyAsync(Guid propertyId, string name, decimal surface, string status, Address address)

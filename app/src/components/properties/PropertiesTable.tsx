@@ -38,9 +38,9 @@ export default function PropertiesTable({
           </TableRow>
         </TableHead>
         <TableBody>
-          {properties.map((property) => (
+          {properties.map((property, idx) => (
             <TableRow
-              key={property.id}
+              key={property.id || idx}
               sx={{ "&:hover": { backgroundColor: "#fafafa" } }}
             >
               <TableCell>

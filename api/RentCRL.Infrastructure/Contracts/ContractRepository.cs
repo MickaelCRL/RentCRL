@@ -23,8 +23,15 @@ namespace RentCRL.Infrastructure.Contracts
                               .Where(c => c.OwnerId == ownerId && c.EntityType == nameof(Contract))
                               .ToFeedIterator();
 
-            var response = await feedIterator.ReadNextAsync();
-            return response.ToList();
+            var results = new List<Contract>();
+
+            while (feedIterator.HasMoreResults)
+            {
+                var response = await feedIterator.ReadNextAsync();
+                results.AddRange(response);
+            }
+
+            return results;
         }
     }
 }
