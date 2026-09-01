@@ -115,6 +115,10 @@ namespace RentCRL.Presentation.Properties
             if (!IsOwnerEmailValid)
                 return Results.Unauthorized();
 
+            var propertyResult = await propertyService.GetPropertyByIdAsync(propertyId);
+            if (propertyResult.Value.OwnerId != ownerId)
+                return Results.Forbid();
+
             var result = await propertyService.DeletePropertyByIdAsync(propertyId);
 
             if (result.IsSuccess)

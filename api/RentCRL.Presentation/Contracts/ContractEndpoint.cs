@@ -77,8 +77,8 @@ namespace RentCRL.Presentation.Contracts
                 return Results.Unauthorized();
 
             var contractResult = await contractService.GetContractByIdAsync(contractId);
-            if (!contractResult.IsSuccess)
-                return Results.NotFound();
+            if (contractResult.Value.OwnerId != ownerId)
+                return Results.Forbid();
 
             var result = await contractService.DeleteContractByIdAsync(contractId);
 
