@@ -116,8 +116,17 @@ namespace RentCRL.Presentation.Properties
                 return Results.Unauthorized();
 
             var propertyResult = await propertyService.GetPropertyByIdAsync(propertyId);
-            if (propertyResult.Value.OwnerId != ownerId)
-                return Results.Forbid();
+            if (propertyResult.IsSuccess)
+            {
+                if (propertyResult.Value.OwnerId != ownerId)
+                    return Results.Forbid();
+            }
+            else
+            {
+                if (propertyResult.Error == PropertyErrors.CouldNotFoundPropertyById)
+                    return Results.NotFound();
+                return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);
+            }
 
             var result = await propertyService.DeletePropertyByIdAsync(propertyId);
 

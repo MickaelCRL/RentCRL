@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using RentCRL.Application.Contracts;
+using RentCRL.Application.Properties;
 using RentCRL.Application.Users;
 using RentCRL.Domain.Contracts;
 using RentCRL.Presentation.Users;
@@ -77,8 +79,17 @@ namespace RentCRL.Presentation.Contracts
                 return Results.Unauthorized();
 
             var contractResult = await contractService.GetContractByIdAsync(contractId);
-            if (contractResult.Value.OwnerId != ownerId)
-                return Results.Forbid();
+            if (contractResult.IsSuccess)
+            {
+                if (contractResult.Value.OwnerId != ownerId)
+                    return Results.Forbid();
+            }
+            else
+            {
+                if (contractResult.Error == ContractErrors.CouldNotFoundContractById)
+                    return Results.NotFound();
+                return Results.Problem(statusCode: StatusCodes.Status500InternalServerError);
+            }
 
             var result = await contractService.DeleteContractByIdAsync(contractId);
 
@@ -118,6 +129,7 @@ namespace RentCRL.Presentation.Contracts
             Guid ownerId,
             IContractService contractService,
             IOwnerService ownerService,
+            IPropertyService propertyService,
             IValidator<ContractModel> validator,
             ClaimsPrincipal user
         )
@@ -129,6 +141,10 @@ namespace RentCRL.Presentation.Contracts
             var isOwnerEmailValid = await user.IsOwnerEmailMatchingAsync(ownerId, ownerService);
             if (!isOwnerEmailValid)
                 return Results.Unauthorized();
+
+            var propertyResult = await propertyService.GetPropertyByIdAsync(contractModel.PropertyId);
+            if (!propertyResult.IsSuccess || propertyResult.Value.OwnerId != ownerId)
+                return Results.Forbid();
 
             var result = await contractService.CreateContractAsync(
                 ownerId,
